@@ -1,4 +1,5 @@
 BINDIR ?= $(CURDIR)/bin
+TMPDIR ?= $(CURDIR)/tmp
 ARCH   ?= amd64
 
 help:  ## display this help
@@ -21,14 +22,15 @@ image: ## build docker image
 
 clean: ## clean up created files
 	rm -rf \
-		$(BINDIR)
+		$(BINDIR) \
+		$(TMPDIR)
 
 all: test build docker ## runs test, build and docker
 
 test-coverage: ## Generate test coverage report
-	mkdir -p tmp
-	go test ./... --coverprofile tmp/outfile
-	go tool cover -html=tmp/outfile
+	mkdir -p $(TMPDIR)
+	go test ./... --coverprofile $(TMPDIR)/outfile
+	go tool cover -html=$(TMPDIR)/outfile
 
 report-card: ## Generate static analysis report
 	goreportcard-cli -v
