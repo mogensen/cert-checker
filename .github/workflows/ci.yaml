@@ -1,0 +1,37 @@
+name: Build and Test
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    branches:
+      - '*'
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    name: Build & Test
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.14.0'
+      -
+        name: Download dependencies
+        run: go mod download
+      -
+        name: Build & Test
+        run: |
+          go build -v ./cmd/git-open 
+          go test ./...
+      -
+        name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          args: release --snapshot --skip-publish --rm-dist
+          workdir: ./cmd/git-open

@@ -1,0 +1,15 @@
+loglevel: debug
+intervalminutes: 1
+certificates:
+    - dns: google.com
+    - dns: example.com
+    - dns: expired.badssl.com
+    - dns: wrong.host.badssl.com
+    - dns: untrusted-root.badssl.com
+    - dns: self-signed.badssl.com
+    - dns: revoked.badssl.com
+    - dns: dh480.badssl.com
+    - dns: dh512.badssl.com
+    - dns: null.badssl.com
+    - dns: rc4-md5.badssl.com
+    - dns: rc4.badssl.com
