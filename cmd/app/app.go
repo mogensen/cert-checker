@@ -24,9 +24,19 @@ func NewCommand(ctx context.Context) *cobra.Command {
 		Long:  helpOutput,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			opts, err := newOptionsFromFile("config.yaml")
+			nlog := logrus.New()
+			nlog.SetOutput(os.Stdout)
+			nlog.SetFormatter(&logrus.TextFormatter{FullTimestamp: true})
+
+			log := logrus.NewEntry(nlog)
+
+			configFile, err := cmd.Flags().GetString("config")
 			if err != nil {
-				panic(fmt.Sprintf("Could not start server: %v", err))
+				nlog.Fatalf("Could not ger configuration file: %v", err)
+			}
+			opts, err := newOptionsFromFile(configFile)
+			if err != nil {
+				nlog.Fatalf("Could not start server: %v", err)
 			}
 
 			logLevel, err := logrus.ParseLevel(opts.LogLevel)
@@ -34,16 +44,10 @@ func NewCommand(ctx context.Context) *cobra.Command {
 				return fmt.Errorf("failed to parse  loglevel %q: %s",
 					opts.LogLevel, err)
 			}
-
-			nlog := logrus.New()
-			nlog.SetOutput(os.Stdout)
 			nlog.SetLevel(logLevel)
-			nlog.SetFormatter(&logrus.TextFormatter{FullTimestamp: true})
-
-			log := logrus.NewEntry(nlog)
 
 			metrics := metrics.New(log)
-			if err := metrics.Run("0.0.0.0:9090"); err != nil {
+			if err := metrics.Run("0.0.0.0:8080"); err != nil {
 				return fmt.Errorf("failed to start metrics server: %s", err)
 			}
 

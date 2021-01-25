@@ -32,7 +32,7 @@ func New(interval time.Duration, metrics *metrics.Metrics, log *logrus.Entry, ce
 // Run starts the main loop that will call ProbeAll regularly.
 func (c *Controller) Run(ctx context.Context) error {
 	// Start by probing all certificates before starting the ticker
-	c.probeAll()
+	c.probeAll(ctx)
 
 	ticker := time.NewTicker(c.interval)
 	defer ticker.Stop()
@@ -50,17 +50,20 @@ func (c *Controller) Run(ctx context.Context) error {
 				return nil
 			default:
 			}
-			c.probeAll()
+			c.probeAll(ctx)
 		}
 	}
 }
 
 // probeAll triggers the Probe function for each registered service in the manager.
 // Everything is done asynchronously.
-func (c *Controller) probeAll() {
+func (c *Controller) probeAll(ctx context.Context) {
 	c.log.Debug("Probing all")
 
 	for id, cer := range c.certs {
+		if ctx.Err() != nil {
+			return
+		}
 		c.log.Debugf("Probing: %s", cer.DNS)
 
 		cer.Info = cert.NewCert(cer.DNS)

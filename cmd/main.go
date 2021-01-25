@@ -13,7 +13,9 @@ import (
 
 func main() {
 	ctx := signalHandler()
+
 	cmd := app.NewCommand(ctx)
+	cmd.PersistentFlags().StringP("config", "c", "config.yaml", "config file (default is config.yaml)")
 
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)

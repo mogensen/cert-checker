@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: cert-checker
+  name: cert-checker
+  labels:
+    app: kube-prometheus-stack-alertmanager
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: cert-checker
+  endpoints:
+  - port: web
