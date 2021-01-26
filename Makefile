@@ -8,17 +8,16 @@ help:  ## display this help
 
 .PHONY: help build docker all clean
 
-test: ## test version-checker
+test: ## test cert-checker
 	go test ./...
 
-build: ## build version-checker
+build: ## build cert-checker
 	mkdir -p $(BINDIR)
-	CGO_ENABLED=0 go build -o ./bin/version-checker ./cmd/.
+	CGO_ENABLED=0 go build -o ./bin/cert-checker ./cmd/.
 
-verify: test build ## tests and builds version-checker
+verify: test build ## tests and builds cert-checker
 
 image: ## build docker image
-	GOARCH=$(ARCH) GOOS=linux CGO_ENABLED=0 go build -o ./bin/version-checker-linux ./cmd/.
 	docker build -t mogensen/cert-checker:v0.0.1 .
 
 clean: ## clean up created files
@@ -41,11 +40,18 @@ dev.kind.delete: ## Delete local kubernetes cluster
 
 dev.kind.create: ## Create local cluster
 	kind create cluster --name $(KIND_CLUSTER_NAME) --config deploy/kind/kind-cluster-config.yaml || true
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+	kubectl apply --wait -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo update
+	sleep 120
+	helm upgrade --wait --install prometheus prometheus-community/kube-prometheus-stack \
+	 --set grafana.ingress.enabled=enabled										 		\
+	 --set grafana.ingress.hosts='{grafana.localtest.me}'  						 		\
+	 --set prometheus.ingress.enabled=enabled										 	\
+	 --set prometheus.ingress.hosts='{prometheus.localtest.me}'  						\
+	 --set grafana.sidecar.dashboards.searchNamespace=ALL
 
-dev.kind.install: ## Install cert-checker on kind cluster
-	helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --set grafana.ingress.enabled=enabled --set grafana.ingress.hosts.0='grafana.localtest.me'
+dev.kind.install: image ## Install cert-checker on kind cluster
 	kind --name $(KIND_CLUSTER_NAME) load docker-image   mogensen/cert-checker:v0.0.1
 	kubectl apply -n cert-checker -f deploy/yaml/
+	kubectl delete pod -l app=cert-checker -n cert-checker

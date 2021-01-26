@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/mogensen/cert"
@@ -67,10 +68,18 @@ func (c *Controller) probeAll(ctx context.Context) {
 		c.log.Debugf("Probing: %s", cer.DNS)
 
 		cer.Info = cert.NewCert(cer.DNS)
+		// For now we will ignore dial up errors
+		if strings.HasPrefix(cer.Info.Error, "dial tcp") {
+			return
+		}
+
 		c.certs[id] = cer
 
 		isValid := cer.Info.Error == ""
 
-		c.metrics.AddCertificateInfo(cer.DNS, cer.Info.Issuer, cer.Info.NotBefore, cer.Info.NotAfter, isValid)
+		if !isValid {
+			c.log.Debugf(" - Found error for %s : %s", cer.DNS, cer.Info.Error)
+		}
+		c.metrics.AddCertificateInfo(cer, isValid)
 	}
 }

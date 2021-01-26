@@ -33,7 +33,37 @@ cert-checker can be installed as a standalone static binary from the release pag
 
 [latest release](https://github.com/mogensen/cert-checker/releases/latest/)
 
+### In Kubernetes as static manifests 
+
+cert-checker can be installed as static manifests:
+
+```sh
+$ kubectl apply -k ./deploy/yaml
+```
+
+Remember to edit the configmap with the actual domains you want to monitor.. 
+
 ## Metrics
 
 By default, cert-checker will expose the version information as Prometheus
 metrics on `0.0.0.0:8080/metrics`.
+
+
+## Development
+
+Test the full setup in Kubernetes with Prometheus and Grafana dashboards:
+
+```bash
+# First create a new kind cluster locally, and install prometheus
+make dev.kind.create
+# Build a docker image, load it into kind and deploy cert-checker and promeheus/grafana stuff
+make image dev.kind.install
+```
+
+Access the local infrastructure here:
+
+| System        | URL                                                                                                        |
+| ------------- |------------------------------------------------------------------------------------------------------------|
+| Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h | 
+| Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             | 
+

@@ -27,7 +27,6 @@ data:
       "editable": true,
       "gnetId": 12833,
       "graphTooltip": 0,
-      "id": 25,
       "links": [],
       "panels": [
         {
@@ -55,7 +54,7 @@ data:
           },
           "gridPos": {
             "h": 5,
-            "w": 12,
+            "w": 8,
             "x": 0,
             "y": 0
           },
@@ -85,7 +84,63 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Certs with error",
+          "title": "Broken Certificates",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "Certificates with a lifetime < 30 days",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 8,
+            "y": 0
+          },
+          "id": 9,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.3.5",
+          "targets": [
+            {
+              "expr": "count( ((cert_checker_expire_time{} - time()) / 86400 >= 0) < 30)",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Certificates about to expire",
           "type": "stat"
         },
         {
@@ -109,8 +164,8 @@ data:
           },
           "gridPos": {
             "h": 5,
-            "w": 12,
-            "x": 12,
+            "w": 8,
+            "x": 16,
             "y": 0
           },
           "id": 5,
@@ -147,8 +202,13 @@ data:
           "description": "",
           "fieldConfig": {
             "defaults": {
+              "color": {
+                "fixedColor": "red",
+                "mode": "fixed"
+              },
               "custom": {
                 "align": null,
+                "displayMode": "color-text",
                 "filterable": false
               },
               "mappings": [],
@@ -199,6 +259,54 @@ data:
                     "value": "left"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "not_after"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 225
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "not_before"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 234
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "issuer"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 395
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "cert_error"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 640
+                  }
+                ]
               }
             ]
           },
@@ -221,7 +329,7 @@ data:
           "pluginVersion": "7.3.5",
           "targets": [
             {
-              "expr": "sum by(dns, issuer, not_before, not_after) (cert_checker_is_valid) == 0",
+              "expr": "sum by(dns, issuer, not_before, not_after, cert_error) (cert_checker_is_valid) == 0",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -247,7 +355,8 @@ data:
                 },
                 "indexByName": {
                   "Time": 0,
-                  "Value": 5,
+                  "Value": 6,
+                  "cert_error": 5,
                   "dns": 1,
                   "issuer": 2,
                   "not_after": 4,
@@ -255,6 +364,154 @@ data:
                 },
                 "renameByName": {
                   "Value": "Is Valid",
+                  "cert_error": "",
+                  "current_version": "Current Version",
+                  "dns": "",
+                  "image": "Image",
+                  "latest_version": "Latest Version",
+                  "not_after": ""
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Prometheus",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "displayMode": "color-text",
+                "filterable": true
+              },
+              "decimals": 1,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "rgb(249, 249, 249)",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 15
+                  },
+                  {
+                    "color": "green",
+                    "value": 30
+                  }
+                ]
+              },
+              "unit": "d"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Is Latest"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "from": "",
+                        "id": 0,
+                        "text": "No",
+                        "to": "",
+                        "type": 1,
+                        "value": "0"
+                      },
+                      {
+                        "from": "1",
+                        "id": 1,
+                        "text": "Yes",
+                        "to": "999999999",
+                        "type": 2,
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.align",
+                    "value": "left"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 14
+          },
+          "id": 8,
+          "options": {
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "Value"
+              }
+            ]
+          },
+          "pluginVersion": "7.3.5",
+          "targets": [
+            {
+              "expr": "(cert_checker_expire_time{} - time()) / 60/60/24",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Certification Expirations",
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "Value": false,
+                  "__name__": true,
+                  "container": true,
+                  "endpoint": true,
+                  "instance": true,
+                  "job": true,
+                  "namespace": true,
+                  "pod": true,
+                  "service": true
+                },
+                "indexByName": {
+                  "Time": 0,
+                  "Value": 6,
+                  "cert_error": 5,
+                  "dns": 1,
+                  "issuer": 2,
+                  "not_after": 4,
+                  "not_before": 3
+                },
+                "renameByName": {
+                  "Value": "",
+                  "cert_error": "",
                   "current_version": "Current Version",
                   "dns": "",
                   "image": "Image",
@@ -267,6 +524,7 @@ data:
           "type": "table"
         }
       ],
+      "refresh": "5m",
       "schemaVersion": 26,
       "style": "dark",
       "tags": [],
@@ -274,7 +532,7 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-15m",
+        "from": "now-30m",
         "to": "now"
       },
       "timepicker": {

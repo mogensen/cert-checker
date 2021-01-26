@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mogensen/cert-checker/pkg/models"
 	"github.com/sirupsen/logrus"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -18,29 +19,35 @@ import (
 type Metrics struct {
 	*http.Server
 
-	registry        *prometheus.Registry
-	dnsCertValidity *prometheus.GaugeVec
-	log             *logrus.Entry
+	registry       *prometheus.Registry
+	certExpiration *prometheus.GaugeVec
+	certValidity   *prometheus.GaugeVec
+	log            *logrus.Entry
 
 	// container cache stores a cache of a container's current image, version,
 	// and the latest
-	containerCache map[string]cacheItem
+	containerCache map[string]models.Certificate
 	mu             sync.Mutex
-}
-
-type cacheItem struct {
-	issuer    string
-	notBefore string
-	notAfter  string
 }
 
 // New returns a new configured instance of the Metrics server
 func New(log *logrus.Entry) *Metrics {
-	containerImageVersion := prometheus.NewGaugeVec(
+	certValidity := prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Namespace: "cert_checker",
 			Name:      "is_valid",
 			Help:      "Detailing if the certificate served by the server at the dns is valid",
+		},
+		[]string{
+			"dns", "issuer", "not_before", "not_after", "cert_error",
+		},
+	)
+
+	certExpiration := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "cert_checker",
+			Name:      "expire_time",
+			Help:      "Detailing when a certificate is set to expire",
 		},
 		[]string{
 			"dns", "issuer", "not_before", "not_after",
@@ -48,13 +55,15 @@ func New(log *logrus.Entry) *Metrics {
 	)
 
 	registry := prometheus.NewRegistry()
-	registry.MustRegister(containerImageVersion)
+	registry.MustRegister(certValidity)
+	registry.MustRegister(certExpiration)
 
 	return &Metrics{
-		log:             log,
-		registry:        registry,
-		dnsCertValidity: containerImageVersion,
-		containerCache:  make(map[string]cacheItem),
+		log:            log,
+		registry:       registry,
+		certExpiration: certExpiration,
+		certValidity:   certValidity,
+		containerCache: make(map[string]models.Certificate),
 	}
 }
 
@@ -89,27 +98,37 @@ func (m *Metrics) Run(servingAddress string) error {
 }
 
 // AddCertificateInfo registers a new or updates and existing certificate record
-func (m *Metrics) AddCertificateInfo(dns, issuer, notAfter, notBefore string, isValid bool) {
+func (m *Metrics) AddCertificateInfo(cer models.Certificate, isValid bool) {
 	// Remove old certificate information if it exists
-	m.RemoveCertificateInfo(dns)
+	m.RemoveCertificateInfo(cer.DNS)
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
+
+	m.containerCache[cer.DNS] = cer
 
 	isValidF := 0.0
 	if isValid {
 		isValidF = 1.0
 	}
 
-	m.dnsCertValidity.With(
-		m.buildLabels(dns, issuer, notAfter, notBefore),
+	m.certValidity.With(
+		m.buildLabelsValidity(cer),
 	).Set(isValidF)
 
-	m.containerCache[dns] = cacheItem{
-		issuer:    issuer,
-		notAfter:  notAfter,
-		notBefore: notBefore,
+	if !isValid {
+		return
 	}
+
+	parsedTime, err := time.Parse("2006-01-02 15:04:05 -0700 MST", cer.Info.NotAfter)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	m.certExpiration.With(
+		m.buildLabelsExpiration(cer),
+	).Set(float64(parsedTime.Unix()))
 }
 
 // RemoveCertificateInfo removed an existing certificate record
@@ -119,21 +138,32 @@ func (m *Metrics) RemoveCertificateInfo(dns string) {
 
 	item, ok := m.containerCache[dns]
 	if !ok {
+		m.log.Debugf("Did not find %s in cache", dns)
 		return
 	}
 
-	m.dnsCertValidity.Delete(
-		m.buildLabels(dns, item.issuer, item.notBefore, item.notAfter),
-	)
+	m.certValidity.Delete(m.buildLabelsValidity(item))
+	m.certExpiration.Delete(m.buildLabelsExpiration(item))
+
 	delete(m.containerCache, dns)
 }
 
-func (m *Metrics) buildLabels(dns, issuer, notBefore, notAfter string) prometheus.Labels {
+func (m *Metrics) buildLabelsExpiration(cer models.Certificate) prometheus.Labels {
 	return prometheus.Labels{
-		"dns":        dns,
-		"issuer":     issuer,
-		"not_before": notBefore,
-		"not_after":  notAfter,
+		"dns":        cer.DNS,
+		"issuer":     cer.Info.Issuer,
+		"not_before": cer.Info.NotBefore,
+		"not_after":  cer.Info.NotAfter,
+	}
+}
+
+func (m *Metrics) buildLabelsValidity(cer models.Certificate) prometheus.Labels {
+	return prometheus.Labels{
+		"dns":        cer.DNS,
+		"issuer":     cer.Info.Issuer,
+		"not_before": cer.Info.NotBefore,
+		"not_after":  cer.Info.NotAfter,
+		"cert_error": cer.Info.Error,
 	}
 }
 
