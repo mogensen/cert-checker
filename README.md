@@ -11,7 +11,7 @@ alert cluster operators.
 
 This tool is heavily inspired by the awesome [version-checker by jetstack](https://github.com/jetstack/version-checker/).
 
-## Registries
+## Supported Certificate Errors
 
 cert-checker supports the following types of certificate errors (and possible more):
 
