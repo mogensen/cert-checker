@@ -1,6 +1,6 @@
 # cert-checker
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https://actions-badge.atrox.dev/mogensen/cert-checker/badge)](https://actions-badge.atrox.dev/mogensen/cert-checker/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fmogensen%2Fcert-checker%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/mogensen/cert-checker/goto?ref=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mogensen/cert-checker)](https://goreportcard.com/report/github.com/mogensen/cert-checker)
 [![codecov](https://codecov.io/gh/mogensen/cert-checker/branch/main/graph/badge.svg)](https://codecov.io/gh/mogensen/cert-checker)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmogensen%2Fcert-checker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmogensen%2Fcert-checker?ref=badge_shield)

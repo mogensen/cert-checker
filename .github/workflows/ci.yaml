@@ -27,7 +27,7 @@ jobs:
       -
         name: Build & Test
         run: |
-          go build -v ./cmd/
+          go build -o ./cert-checker -v ./cmd/
           go test ./...
       -
         name: Run GoReleaser
