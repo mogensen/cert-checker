@@ -51,12 +51,21 @@ metrics on `0.0.0.0:8080/metrics`.
 ### Grafana Dashboard
 
 A Grafana dashboard is also included in this repository.
+It is located in the deployment folder: `deploy/yaml/grafana-dashboard-cm.yaml`
 
 ![](img/grafana.jpg)
 <center></center>
 <p align="center">
   <b>Grafana Dashboard</b><br>
 </p>
+
+The dashboard shows the following
+
+ - Number of Broken Certificates
+ - Number of Certificates about to expire
+ - Number of Good Certificates
+ - A list with Certificates with errors
+ - A list of Certificates Expirations for valid certificates
 
 ---
 
