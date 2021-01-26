@@ -48,6 +48,38 @@ Remember to edit the configmap with the actual domains you want to monitor..
 By default, cert-checker will expose the version information as Prometheus
 metrics on `0.0.0.0:8080/metrics`.
 
+### Grafana Dashboard
+
+A Grafana dashboard is also included in this repository.
+
+![](img/grafana.jpg)
+<center></center>
+<p align="center">
+  <b>Grafana Dashboard</b><br>
+</p>
+
+---
+
+## Options
+
+By default, without the flag `-c, --config`, cert-checker will
+use a config file located next to the binary named `config.yaml`.
+
+This is currently the only flag / option available. 
+
+```bash
+$ cert-checker -h
+Certificate monitoring utility for watching tls certificates and reporting the result as metrics.
+
+Usage:
+  version-checker [flags]
+
+Flags:
+  -c, --config string   config file (default is config.yaml) (default "config.yaml")
+  -h, --help            help for version-checker
+```
+
+---
 
 ## Development
 
