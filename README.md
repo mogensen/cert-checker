@@ -33,6 +33,32 @@ cert-checker can be installed as a standalone static binary from the release pag
 
 [latest release](https://github.com/mogensen/cert-checker/releases/latest/)
 
+Create a config file like the below example: 
+
+`config.yaml`: 
+
+```yaml
+loglevel: debug
+intervalminutes: 10
+certificates:
+    - dns: google.com
+    - dns: expired.badssl.com
+```
+
+### Run in Docker
+
+You can use the published docker image like this:
+
+First create a config file as above.
+
+```bash
+# Start docker container (mounting the config file may be different on OSX and Windows)
+docker run -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-checker:latest
+# Now open browser at http://localhost:8080/metrics
+```
+
+See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert-checker)
+
 ### In Kubernetes as static manifests 
 
 cert-checker can be installed as static manifests:
