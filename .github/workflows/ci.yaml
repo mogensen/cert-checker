@@ -2,7 +2,7 @@ name: Build and Test
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
   pull_request:
     branches:
       - '*'
@@ -27,11 +27,11 @@ jobs:
       -
         name: Build & Test
         run: |
-          go build -v ./cmd/git-open 
+          go build -v ./cmd/
           go test ./...
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
           args: release --snapshot --skip-publish --rm-dist
-          workdir: ./cmd/git-open
+          workdir: ./cmd/
