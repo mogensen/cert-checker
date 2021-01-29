@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cert-checker.fullname" . }}-test-connection"
+  labels:
+    {{- include "cert-checker.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "cert-checker.fullname" . }}:{{ .Values.service.port }}/metrics']
+  restartPolicy: Never

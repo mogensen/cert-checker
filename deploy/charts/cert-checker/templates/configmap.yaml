@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cert-checker.fullname" . }}
+  labels:
+    {{- include "cert-checker.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+     {{- with .Values.certchecker }}
+        {{- toYaml . | nindent 6 }}
+      {{- end }}

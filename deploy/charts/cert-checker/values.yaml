@@ -1,0 +1,87 @@
+# Default values for cert-checker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: mogensen/cert-checker
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.0.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+certchecker:
+  loglevel: info
+  intervalminutes: 1
+  certificates:
+    - dns: google.com
+    - dns: example.com
+    - dns: expired.badssl.com
+    - dns: wrong.host.badssl.com
+    - dns: untrusted-root.badssl.com
+    - dns: self-signed.badssl.com
+    - dns: revoked.badssl.com
+    - dns: dh480.badssl.com
+    - dns: dh512.badssl.com
+    - dns: null.badssl.com
+    - dns: rc4-md5.badssl.com
+    - dns: rc4.badssl.com
+  
+serviceMonitor: false
+
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: "8080"
+  prometheus.io/scrape: "true"
+  enable.cert-checker.io/cert-checker: "true"
+
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
