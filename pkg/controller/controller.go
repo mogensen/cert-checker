@@ -70,7 +70,8 @@ func (c *Controller) probeAll(ctx context.Context) {
 		cer.Info = cert.NewCert(cer.DNS)
 		// For now we will ignore dial up errors
 		if strings.HasPrefix(cer.Info.Error, "dial tcp") {
-			return
+			c.log.Warnf("Problem checking %s : %s", cer.DNS, cer.Info.Error)
+			continue
 		}
 
 		c.certs[id] = cer
