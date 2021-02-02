@@ -70,12 +70,27 @@ $ kubectl apply -k ./deploy/yaml
 Remember to edit the configmap with the actual domains you want to monitor.. 
 
 ### Helm
+
 cert-checker can be installed as as helm release:
-```
+
+```bash
 $ kubectl create namespace cert-checker
 $ helm install cert-checker deploy/charts/cert-checker --namespace cert-checker
 ```
-Depending on your setup, you may need to modify the `ServiceMonitor` to get Prometheus to scrape it in a particular namespace. See [this](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#prometheusioscrape).
+
+Depending on your setup, you may need to modify the `ServiceMonitor` to get Prometheus to scrape it in a particular namespace.
+See [this](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#prometheusioscrape).
+
+You may also need to add additional labels to the `ServiceMonitor`.
+If you have installed the `prometheus-community/kube-prometheus-stack` with the name of `prometheus` the following should work:
+
+```bash
+$ helm upgrade cert-checker deploy/charts/cert-checker \
+    --namespace cert-checker            \
+    --set=grafanaDashboard.enabled=true \
+    --set=serviceMonitor.enabled=true   \
+    --set=serviceMonitor.additionalLabels.release=prometheus
+```
 
 ## Metrics
 

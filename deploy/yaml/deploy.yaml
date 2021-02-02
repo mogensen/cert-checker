@@ -86,4 +86,3 @@ data:
         - dns: null.badssl.com
         - dns: rc4-md5.badssl.com
         - dns: rc4.badssl.com
-  

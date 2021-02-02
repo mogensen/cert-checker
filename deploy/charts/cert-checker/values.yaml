@@ -8,7 +8,7 @@ image:
   repository: mogensen/cert-checker
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.0.1"
+  # tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,7 +40,12 @@ certchecker:
     - dns: rc4-md5.badssl.com
     - dns: rc4.badssl.com
   
-serviceMonitor: false
+serviceMonitor:
+  enabled: false
+  additionalLabels: {}
+
+grafanaDashboard:
+  enabled: false
 
 podAnnotations:
   prometheus.io/path: /metrics
@@ -48,11 +53,11 @@ podAnnotations:
   prometheus.io/scrape: "true"
   enable.cert-checker.io/cert-checker: "true"
 
-
 podSecurityContext:
   fsGroup: 2000
 
 securityContext:
+  privileged: false
   capabilities:
     drop:
     - ALL
