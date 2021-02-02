@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  cert-checker:
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2021-02-02T20:45:06.263477784Z"
+    description: A tool to expose SSL Certificate information as prometheus metrics.
+    digest: cdf1bcf8c7bfdfa62ac3296eb81d94dccc814013c532a60cbefd6bc4c64d6e75
+    name: cert-checker
+    type: application
+    urls:
+    - https://github.com/mogensen/cert-checker/releases/download/cert-checker-helm-chart-0.0.1/cert-checker-0.0.1.tgz
+    version: 0.0.1
+generated: "2021-02-02T20:45:06.066507931Z"
