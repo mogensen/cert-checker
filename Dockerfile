@@ -7,7 +7,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Build
-COPY . .
+COPY cmd cmd/
+COPY pkg pkg/
+
 RUN CGO_ENABLED=0 go build -ldflags '-w -s' -o /app/cert-checker ./cmd/
 
 # Build runtime container
