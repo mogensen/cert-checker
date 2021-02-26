@@ -92,6 +92,42 @@ $ helm upgrade cert-checker deploy/charts/cert-checker \
     --set=serviceMonitor.additionalLabels.release=prometheus
 ```
 
+### Kustomize
+
+cert-checker can be installed using [kustomize](https://kustomize.io/):
+
+Create a `kustomization.yaml` file:
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: cert-checker
+resources:
+- github.com/mogensen/cert-checker/deploy/yaml
+# optionally pin to a specific git tag
+# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.1
+
+# override confimap with your required settings
+patchesStrategicMerge:
+- |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: cert-checker
+      namespace: cert-checker
+    data:
+      config.yaml: |
+        loglevel: info
+        intervalminutes: 60
+        certificates:
+            - dns: my-very-own-domain.com
+```
+Use the `kustomization.yaml` file to preview and deploy cert-checker:
+```bash
+$ kustomize build kustomization.yaml | less # preview yaml manifests
+$ kustomize build kustomization.yaml | kubectl apply --dry-run=client -f - # dry-run apply manifests
+$ kustomize build kustomization.yaml | kubectl apply -f - # deploy manifests
+```
+
 ## Metrics
 
 By default, cert-checker will expose the version information as Prometheus
