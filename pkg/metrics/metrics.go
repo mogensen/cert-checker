@@ -39,7 +39,7 @@ func New(log *logrus.Entry) *Metrics {
 			Help:      "Detailing if the certificate served by the server at the dns is valid",
 		},
 		[]string{
-			"dns", "issuer", "not_before", "not_after", "cert_error",
+			"dns", "issuer", "not_before", "not_after", "cert_error", "tls_min_version",
 		},
 	)
 
@@ -159,11 +159,12 @@ func (m *Metrics) buildLabelsExpiration(cer models.Certificate) prometheus.Label
 
 func (m *Metrics) buildLabelsValidity(cer models.Certificate) prometheus.Labels {
 	return prometheus.Labels{
-		"dns":        cer.DNS,
-		"issuer":     cer.Info.Issuer,
-		"not_before": cer.Info.NotBefore,
-		"not_after":  cer.Info.NotAfter,
-		"cert_error": cer.Info.Error,
+		"dns":             cer.DNS,
+		"issuer":          cer.Info.Issuer,
+		"not_before":      cer.Info.NotBefore,
+		"not_after":       cer.Info.NotAfter,
+		"cert_error":      cer.Info.Error,
+		"tls_min_version": cer.Info.MinimumTLSVersion,
 	}
 }
 

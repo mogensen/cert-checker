@@ -1,0 +1,19 @@
+prometheus:
+  ingress:
+    enabled: enabled
+    hosts:
+      - prometheus.localtest.me
+
+grafana:
+  ingress:
+    enabled: enabled
+    hosts:
+      - grafana.localtest.me
+
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
+
+  grafana.ini:
+    auth.anonymous:
+      enabled: true

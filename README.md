@@ -11,7 +11,26 @@ alert cluster operators.
 
 This tool is heavily inspired by the awesome [version-checker by jetstack](https://github.com/jetstack/version-checker/).
 
-## Supported Certificate Errors
+## Table of contents
+
+* [Features](#features)
+  + [Testing for Certificate Errors](#testing-for-certificate-errors)
+  + [Testing for minimal TLS Version](#testing-for-minimal-tls-version)
+* [Installation](#installation)
+  + [Run in Docker](#run-in-docker)
+  + [In Kubernetes as static manifests](#in-kubernetes-as-static-manifests)
+  + [Helm](#helm)
+  + [Kustomize](#kustomize)
+* [Metrics](#metrics)
+  + [Grafana Dashboard](#grafana-dashboard)
+* [Options](#options)
+* [Development](#development)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+## Features
+
+### Testing for Certificate Errors
 
 cert-checker supports the following types of certificate errors (and possible more):
 
@@ -20,10 +39,27 @@ cert-checker supports the following types of certificate errors (and possible mo
 - Bad root certificates
 - Revoked certificate
 - Cipher suites not allowed
-    * dh480
-    * dh512
-    * null
-    * rc4
+    * `dh480`
+    * `dh512`
+    * `null`
+    * `rc4`
+
+If cert-checker finds any certificate errors, these are displayed on the Grafana dashboard.
+
+### Testing for minimal TLS Version
+
+cert-checker checks the minimum supported SSL/TLS version for the endpoints.
+
+The following SSL/TLS versions are tested:
+ - SSL 3.0 - Deprecated in 2015
+ - TLS 1.0 - Deprecated in 2020
+ - TLS 1.1 - Deprecated in 2020
+ - TLS 1.2
+ - TLS 1.3
+
+See [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security) for more info.
+
+The minimum supported versions are displayed on the Grafana dashboard.
 
 ---
 
@@ -33,9 +69,9 @@ cert-checker can be installed as a standalone static binary from the release pag
 
 [latest release](https://github.com/mogensen/cert-checker/releases/latest/)
 
-Create a config file like the below example: 
+Create a config file like the below example:
 
-`config.yaml`: 
+`config.yaml`:
 
 ```yaml
 loglevel: debug
@@ -59,7 +95,7 @@ docker run -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-che
 
 See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert-checker)
 
-### In Kubernetes as static manifests 
+### In Kubernetes as static manifests
 
 cert-checker can be installed as static manifests:
 
@@ -67,7 +103,7 @@ cert-checker can be installed as static manifests:
 $ kubectl apply -k ./deploy/yaml
 ```
 
-Remember to edit the configmap with the actual domains you want to monitor.. 
+Remember to edit the configmap with the actual domains you want to monitor..
 
 ### Helm
 
@@ -131,7 +167,7 @@ $ kustomize build kustomization.yaml | kubectl apply -f - # deploy manifests
 ## Metrics
 
 By default, cert-checker will expose the version information as Prometheus
-metrics on `0.0.0.0:8080/metrics`.
+metrics on `http://0.0.0.0:8080/metrics`.
 
 ### Grafana Dashboard
 
@@ -151,6 +187,13 @@ The dashboard shows the following
  - Number of Good Certificates
  - A list with Certificates with errors
  - A list of Certificates Expirations for valid certificates
+ - Minimum TLS versions supported
+
+The conventions used on the dashboard are:
+
+ - Red (text or background): Something is broken, and should be fixed!
+ - Orange (text or background): Something smells, and should properly be fixed!
+ - Green (text or background): All is good! Go drink coffee!
 
 ---
 
@@ -159,7 +202,7 @@ The dashboard shows the following
 By default, without the flag `-c, --config`, cert-checker will
 use a config file located next to the binary named `config.yaml`.
 
-This is currently the only flag / option available. 
+This is currently the only flag / option available.
 
 ```bash
 $ cert-checker -h
@@ -192,4 +235,3 @@ Access the local infrastructure here:
 | ------------- |------------------------------------------------------------------------------------------------------------|
 | Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h | 
 | Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             | 
-

@@ -45,13 +45,12 @@ dev.kind.create: ## Create local cluster
 	helm repo update
 	sleep 120
 	helm upgrade --wait --install prometheus prometheus-community/kube-prometheus-stack \
-	 --set grafana.ingress.enabled=enabled										 		\
-	 --set grafana.ingress.hosts='{grafana.localtest.me}'  						 		\
-	 --set prometheus.ingress.enabled=enabled										 	\
-	 --set prometheus.ingress.hosts='{prometheus.localtest.me}'  						\
-	 --set grafana.sidecar.dashboards.searchNamespace=ALL
+	 --values deploy/kind/prometheus-stack-values.yaml
 
 dev.kind.install: image ## Install cert-checker on kind cluster
 	kind --name $(KIND_CLUSTER_NAME) load docker-image   mogensen/cert-checker:v0.0.1
-	kubectl apply -n cert-checker -f deploy/yaml/
+	kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml
+	kubectl apply -n cert-checker -f deploy/yaml/grafana-dashboard-cm.yaml
+	kubectl apply -n cert-checker -f deploy/yaml/servicemonitor.yaml
+
 	kubectl delete pod -l app=cert-checker -n cert-checker

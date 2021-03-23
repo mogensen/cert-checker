@@ -76,6 +76,7 @@ data:
     certificates:
         - dns: google.com
         - dns: example.com
+        - dns: twitter.com
         - dns: expired.badssl.com
         - dns: wrong.host.badssl.com
         - dns: untrusted-root.badssl.com

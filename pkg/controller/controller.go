@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mogensen/cert"
+	"github.com/genkiroid/cert"
 	"github.com/mogensen/cert-checker/pkg/metrics"
 	"github.com/mogensen/cert-checker/pkg/models"
 	"github.com/sirupsen/logrus"

@@ -53,8 +53,8 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 5,
-            "w": 8,
+            "h": 6,
+            "w": 3,
             "x": 0,
             "y": 0
           },
@@ -71,9 +71,10 @@ data:
               "fields": "",
               "values": false
             },
+            "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.3.5",
+          "pluginVersion": "7.4.3",
           "targets": [
             {
               "expr": "count(cert_checker_is_valid == 0)",
@@ -109,9 +110,9 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
+            "h": 6,
+            "w": 3,
+            "x": 3,
             "y": 0
           },
           "id": 9,
@@ -127,9 +128,10 @@ data:
               "fields": "",
               "values": false
             },
+            "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.3.5",
+          "pluginVersion": "7.4.3",
           "targets": [
             {
               "expr": "count( ((cert_checker_expire_time{} - time()) / 86400 >= 0) < 30)",
@@ -141,6 +143,301 @@ data:
           "timeFrom": null,
           "timeShift": null,
           "title": "Certificates about to expire",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "SSLv3 is cryptographically broken and should not be used.\nSSLv3 was deprecated in 1996",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 6,
+            "y": 0
+          },
+          "id": 12,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "count(cert_checker_is_valid{tls_min_version=\"SSLv3\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Min TLS Version: SSLv3",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "TLS 1.0 was deprecated in 2020",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 9,
+            "y": 0
+          },
+          "id": 13,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "count(cert_checker_is_valid{tls_min_version=\"TLS 1.0\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Min TLS Version: TLS 1.0",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "TLS 1.1 was deprecated in 2020",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 12,
+            "y": 0
+          },
+          "id": 14,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "count(cert_checker_is_valid{tls_min_version=\"TLS 1.1\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Min TLS Version: TLS 1.1",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 15,
+            "y": 0
+          },
+          "id": 15,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "count(cert_checker_is_valid{tls_min_version=\"TLS 1.2\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Min TLS Version: TLS 1.2",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "min": 0,
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 18,
+            "y": 0
+          },
+          "id": 16,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "count(cert_checker_is_valid{tls_min_version=\"TLS 1.3\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Min TLS Version: TLS 1.3",
           "type": "stat"
         },
         {
@@ -163,9 +460,9 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
+            "h": 6,
+            "w": 3,
+            "x": 21,
             "y": 0
           },
           "id": 5,
@@ -181,9 +478,10 @@ data:
               "fields": "",
               "values": false
             },
+            "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.3.5",
+          "pluginVersion": "7.4.3",
           "targets": [
             {
               "expr": "count(cert_checker_is_valid > 0)",
@@ -314,7 +612,7 @@ data:
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 5
+            "y": 6
           },
           "id": 2,
           "options": {
@@ -326,10 +624,10 @@ data:
               }
             ]
           },
-          "pluginVersion": "7.3.5",
+          "pluginVersion": "7.4.3",
           "targets": [
             {
-              "expr": "sum by(dns, issuer, not_before, not_after, cert_error) (cert_checker_is_valid) == 0",
+              "expr": "sum by(dns, issuer, not_before, not_after, cert_error, tls_min_version) (cert_checker_is_valid) == 0",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -355,12 +653,13 @@ data:
                 },
                 "indexByName": {
                   "Time": 0,
-                  "Value": 6,
+                  "Value": 7,
                   "cert_error": 5,
                   "dns": 1,
                   "issuer": 2,
                   "not_after": 4,
-                  "not_before": 3
+                  "not_before": 3,
+                  "tls_min_version": 6
                 },
                 "renameByName": {
                   "Value": "Is Valid",
@@ -454,7 +753,7 @@ data:
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 14
+            "y": 15
           },
           "id": 8,
           "options": {
@@ -466,7 +765,7 @@ data:
               }
             ]
           },
-          "pluginVersion": "7.3.5",
+          "pluginVersion": "7.4.3",
           "targets": [
             {
               "expr": "(cert_checker_expire_time{} - time()) / 60/60/24",
@@ -502,12 +801,13 @@ data:
                 },
                 "indexByName": {
                   "Time": 0,
-                  "Value": 6,
+                  "Value": 7,
                   "cert_error": 5,
                   "dns": 1,
                   "issuer": 2,
                   "not_after": 4,
-                  "not_before": 3
+                  "not_before": 3,
+                  "tls_min_version": 6
                 },
                 "renameByName": {
                   "Value": "",
@@ -522,10 +822,83 @@ data:
             }
           ],
           "type": "table"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "id": 11,
+          "options": {
+            "showHeader": true
+          },
+          "pluginVersion": "7.4.3",
+          "targets": [
+            {
+              "expr": "sum by(dns, issuer, not_before, not_after, cert_error, tls_min_version) (cert_checker_is_valid) == 1",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Valid Certificates",
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {}
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "Time",
+                    "dns",
+                    "issuer",
+                    "not_after",
+                    "not_before",
+                    "tls_min_version"
+                  ]
+                }
+              }
+            }
+          ],
+          "type": "table"
         }
       ],
       "refresh": "5m",
-      "schemaVersion": 26,
+      "schemaVersion": 27,
       "style": "dark",
       "tags": [],
       "templating": {
@@ -551,5 +924,5 @@ data:
       "timezone": "",
       "title": "Certificate Checker",
       "uid": "cert-checker",
-      "version": 1
+      "version": 2
     }
