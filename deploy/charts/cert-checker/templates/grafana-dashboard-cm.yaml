@@ -8,5 +8,5 @@ metadata:
     {{- include "cert-checker.labels" . | nindent 4 }}
 data:
   cert-checker.json: |-
-  {{ .Files.Get "dashboards/cert-checker.json" | indent 4 }}
+  {{- .Files.Get "dashboards/cert-checker.json" | nindent 4 }}
 {{- end }}

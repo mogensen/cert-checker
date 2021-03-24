@@ -29,6 +29,7 @@ certchecker:
   certificates:
     - dns: google.com
     - dns: example.com
+    - dns: twitter.com
     - dns: expired.badssl.com
     - dns: wrong.host.badssl.com
     - dns: untrusted-root.badssl.com
@@ -39,7 +40,7 @@ certchecker:
     - dns: null.badssl.com
     - dns: rc4-md5.badssl.com
     - dns: rc4.badssl.com
-  
+
 serviceMonitor:
   enabled: false
   additionalLabels: {}
