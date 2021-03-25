@@ -100,7 +100,7 @@ See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert
 cert-checker can be installed as static manifests:
 
 ```sh
-$ kubectl apply -k ./deploy/yaml
+$ kubectl apply -n cert-checker -k ./deploy/yaml
 ```
 
 Remember to edit the configmap with the actual domains you want to monitor..
@@ -233,5 +233,5 @@ Access the local infrastructure here:
 
 | System        | URL                                                                                                        |
 | ------------- |------------------------------------------------------------------------------------------------------------|
-| Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h | 
-| Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             | 
+| Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
+| Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |

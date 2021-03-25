@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "cert-checker.labels" . | nindent 4 }}
     {{- if .Values.serviceMonitor.additionalLabels }}
-{{- .Values.serviceMonitor.additionalLabels | toYaml | nindent 4 }}
+    {{- .Values.serviceMonitor.additionalLabels | toYaml | nindent 4 }}
     {{- end }}
 spec:
   selector:
