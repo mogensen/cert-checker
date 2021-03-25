@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.2"
+    app.kubernetes.io/version: "v0.0.3"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -15,7 +15,7 @@ metadata:
   labels:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.2"
+    app.kubernetes.io/version: "v0.0.3"
 data:
   config.yaml: |
       certificates:
@@ -42,7 +42,7 @@ metadata:
   labels:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.2"
+    app.kubernetes.io/version: "v0.0.3"
 spec:
   type: ClusterIP
   ports:
@@ -61,7 +61,7 @@ metadata:
   labels:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.2"
+    app.kubernetes.io/version: "v0.0.3"
 spec:
   replicas: 1
   selector:
@@ -97,7 +97,7 @@ spec:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
-          image: "mogensen/cert-checker:v0.0.2"
+          image: "mogensen/cert-checker:v0.0.3"
           command: ["/app/cert-checker", "-c", "/data/config.yaml"]
           imagePullPolicy: Always
           volumeMounts:

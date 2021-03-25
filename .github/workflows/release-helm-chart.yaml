@@ -2,8 +2,8 @@ name: Release Charts
 
 on:
   push:
-    tags:
-      - v*.*.*
+    branches:
+      - main
 
 jobs:
   release:
@@ -25,7 +25,7 @@ jobs:
           version: v3.5.1
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.1.0
+        uses: helm/chart-releaser-action@v1.2.0
         with:
           charts_dir: deploy/charts
         env:
