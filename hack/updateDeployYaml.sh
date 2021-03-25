@@ -11,3 +11,11 @@ helm template cert-checker deploy/charts/cert-checker --no-hooks -s templates/gr
     | grep -vi chart \
     | grep -v "# Source" \
     | grep -v "checksum/config" > deploy/yaml/grafana-dashboard-cm.yaml
+
+helm template cert-checker deploy/charts/cert-checker --no-hooks -s templates/servicemonitor.yaml \
+    --set serviceMonitor.enabled=true  \
+    --set serviceMonitor.additionalLabels.release=prometheus  \
+    | grep -vi helm \
+    | grep -vi chart \
+    | grep -v "# Source" \
+    | grep -v "checksum/config" > deploy/yaml/servicemonitor.yaml
