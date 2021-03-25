@@ -47,7 +47,8 @@ func NewCommand(ctx context.Context) *cobra.Command {
 			nlog.SetLevel(logLevel)
 
 			metrics := metrics.New(log)
-			if err := metrics.Run("0.0.0.0:8080"); err != nil {
+			servingAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.Port)
+			if err := metrics.Run(servingAddress); err != nil {
 				return fmt.Errorf("failed to start metrics server: %s", err)
 			}
 

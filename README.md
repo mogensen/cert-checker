@@ -74,10 +74,20 @@ Create a config file like the below example:
 
 ```yaml
 loglevel: debug
+port: 8080  # Optional
 intervalminutes: 10
 certificates:
     - dns: google.com
     - dns: expired.badssl.com
+```
+
+```bash
+./cert-checker -c config.yaml
+DEBU[2021-03-25T21:56:53+01:00] Probing all                                  
+INFO[2021-03-25T21:56:53+01:00] serving metrics on [::]:8080/metrics         
+DEBU[2021-03-25T21:56:53+01:00] Probing: google.com               
+...
+# Now open browser at http://localhost:8080/metrics
 ```
 
 ### Run in Docker
@@ -139,7 +149,7 @@ namespace: cert-checker
 resources:
 - github.com/mogensen/cert-checker/deploy/yaml
 # optionally pin to a specific git tag
-# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.1
+# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.2
 
 # override confimap with your required settings
 patchesStrategicMerge:

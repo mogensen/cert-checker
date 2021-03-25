@@ -1,4 +1,5 @@
 loglevel: debug
+port: 8080
 intervalminutes: 1
 certificates:
     - dns: google.com

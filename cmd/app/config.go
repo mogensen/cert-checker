@@ -10,6 +10,7 @@ import (
 
 type options struct {
 	IntervalMinutes  int `yaml:"intervalminutes"`
+	Port             int `yaml:"port"`
 	IntervalDuration time.Duration
 	LogLevel         string               `yaml:"loglevel"`
 	Certificates     []models.Certificate `yaml:"certificates"`
@@ -24,6 +25,9 @@ func newOptionsFromFile(fileName string) (*options, error) {
 	err = yaml.Unmarshal(bytes, opts)
 	if err != nil {
 		return nil, err
+	}
+	if opts.Port == 0 {
+		opts.Port = 8080
 	}
 	opts.IntervalDuration = time.Duration(int64(opts.IntervalMinutes)) * time.Minute
 	return opts, nil
