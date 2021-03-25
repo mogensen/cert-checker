@@ -15,6 +15,7 @@ This tool is heavily inspired by the awesome [version-checker by jetstack](https
 * [Features](#features)
   + [Testing for Certificate Errors](#testing-for-certificate-errors)
   + [Testing for minimal TLS Version](#testing-for-minimal-tls-version)
+  + [Permissions](#permissions)
 * [Installation](#installation)
   + [Run in Docker](#run-in-docker)
   + [In Kubernetes as static manifests](#in-kubernetes-as-static-manifests)
@@ -59,6 +60,11 @@ The following SSL/TLS versions are tested:
 See [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security) for more info.
 
 The minimum supported versions are displayed on the Grafana dashboard.
+
+### Permissions
+
+A great bonus of how the cert-checker is implemented is that it can run without `root`, and without `CAP_NET_RAW` capability.
+And without Administrator privileges in Windows.
 
 ---
 
