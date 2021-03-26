@@ -17,8 +17,8 @@ FROM scratch
 LABEL description="Certificate monitoring utility for watching tls certificates and reporting the result as metrics."
 WORKDIR /app
 COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=build-env --chown=1000:1000 /app/cert-checker /app/cert-checker
+COPY --from=build-env --chown=35212:35212 /app/cert-checker /app/cert-checker
 
-USER 1000:1000
+USER 35212:35212
 
 CMD ["/app/cert-checker"]

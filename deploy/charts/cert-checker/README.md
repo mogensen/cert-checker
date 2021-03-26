@@ -39,7 +39,7 @@ A tool to expose SSL Certificate information as prometheus metrics.
 | podAnnotations."prometheus.io/path" | string | `"/metrics"` |  |
 | podAnnotations."prometheus.io/port" | string | `"8080"` |  |
 | podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
-| podSecurityContext.fsGroup | int | `2000` |  |
+| podSecurityContext.fsGroup | int | `35212` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext.allowPrivilegeEscalation | bool | `false` |  |
@@ -47,7 +47,7 @@ A tool to expose SSL Certificate information as prometheus metrics.
 | securityContext.privileged | bool | `false` |  |
 | securityContext.readOnlyRootFilesystem | bool | `true` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
-| securityContext.runAsUser | int | `1000` |  |
+| securityContext.runAsUser | int | `35212` |  |
 | service.port | int | `8080` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+
+if ! helm version -c --short | grep -E "v3." >/dev/null; then
+    echo "Helm v3 is needed!"
+    exit 1
+fi
+
 helm template cert-checker deploy/charts/cert-checker --no-hooks --set image.pullPolicy=Always  \
     | grep -vi helm \
     | grep -vi chart \

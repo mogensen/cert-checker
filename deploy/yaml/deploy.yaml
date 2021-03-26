@@ -81,7 +81,7 @@ spec:
     spec:
       serviceAccountName: cert-checker
       securityContext:
-        fsGroup: 2000
+        fsGroup: 35212
       volumes:
         - name: config-volume
           configMap:
@@ -96,7 +96,7 @@ spec:
             privileged: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 35212
           image: "mogensen/cert-checker:v0.0.3"
           command: ["/app/cert-checker", "-c", "/data/config.yaml"]
           imagePullPolicy: Always

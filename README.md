@@ -89,9 +89,9 @@ certificates:
 
 ```bash
 ./cert-checker -c config.yaml
-DEBU[2021-03-25T21:56:53+01:00] Probing all                                  
-INFO[2021-03-25T21:56:53+01:00] serving metrics on [::]:8080/metrics         
-DEBU[2021-03-25T21:56:53+01:00] Probing: google.com               
+DEBU[2021-03-25T21:56:53+01:00] Probing all
+INFO[2021-03-25T21:56:53+01:00] serving metrics on [::]:8080/metrics
+DEBU[2021-03-25T21:56:53+01:00] Probing: google.com
 ...
 # Now open browser at http://localhost:8080/metrics
 ```
@@ -115,7 +115,16 @@ See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert
 cert-checker can be installed as static manifests:
 
 ```sh
-$ kubectl apply -n cert-checker -k ./deploy/yaml
+$ kubectl create namespace cert-checker
+
+# Deploy cert-checker, with kubernetes services and demo configuration
+$ kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml
+
+# If you are using the Grafana sidecar for loading dashboards
+$ kubectl apply -n cert-checker -f deploy/yaml/grafana-dashboard-cm.yaml
+
+# If you are using the Prometheus CRDs for setting up scrape targets
+$ kubectl apply -n cert-checker -f deploy/yaml/servicemonitor.yaml
 ```
 
 Remember to edit the configmap with the actual domains you want to monitor..
