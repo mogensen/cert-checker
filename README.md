@@ -12,19 +12,22 @@ This tool is heavily inspired by the awesome [version-checker by jetstack](https
 
 ## Table of contents
 
-* [Features](#features)
-  + [Testing for Certificate Errors](#testing-for-certificate-errors)
-  + [Testing for minimal TLS Version](#testing-for-minimal-tls-version)
-  + [Permissions](#permissions)
-* [Installation](#installation)
-  + [Run in Docker](#run-in-docker)
-  + [In Kubernetes as static manifests](#in-kubernetes-as-static-manifests)
-  + [Helm](#helm)
-  + [Kustomize](#kustomize)
-* [Metrics](#metrics)
-  + [Grafana Dashboard](#grafana-dashboard)
-* [Options](#options)
-* [Development](#development)
+- [cert-checker](#cert-checker)
+  * [Table of contents](#table-of-contents)
+  * [Features](#features)
+    + [Testing for Certificate Errors](#testing-for-certificate-errors)
+    + [Testing for minimal TLS Version](#testing-for-minimal-tls-version)
+    + [Permissions](#permissions)
+  * [Installation](#installation)
+    + [Run in Docker](#run-in-docker)
+    + [Using docker-compose](#using-docker-compose)
+    + [In Kubernetes as static manifests](#in-kubernetes-as-static-manifests)
+    + [Helm](#helm)
+    + [Kustomize](#kustomize)
+  * [Metrics](#metrics)
+    + [Grafana Dashboard](#grafana-dashboard)
+  * [Options](#options)
+  * [Development](#development)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
