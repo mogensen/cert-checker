@@ -1,0 +1,29 @@
+version: '3.2'
+services:
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./grafana/provisioning/:/etc/grafana/provisioning/:ro
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+    - 9090:9090
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  cert-checker:
+    image: mogensen/cert-checker:latest
+    container_name: cert-checker
+    ports:
+    - 8080:8080
+    volumes:
+    - ./cert-checker/config.yaml:/app/config.yaml:ro

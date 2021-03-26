@@ -1,0 +1,12 @@
+loglevel: debug
+port: 8080  # Optional
+intervalminutes: 2
+certificates:
+    # Is good, but has old TSL 1.0
+    - dns: google.com
+
+    # Is good and has new TSL 1.3
+    - dns: twitter.com
+
+    # Has expired certificate
+    - dns: expired.badssl.com

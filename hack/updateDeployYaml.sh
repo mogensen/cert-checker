@@ -25,3 +25,5 @@ helm template cert-checker deploy/charts/cert-checker --no-hooks -s templates/se
     | grep -vi chart \
     | grep -v "# Source" \
     | grep -v "checksum/config" > deploy/yaml/servicemonitor.yaml
+
+cp deploy/charts/cert-checker/dashboards/cert-checker.json deploy/docker-compose/grafana/provisioning/dashboards/cert-checker.json

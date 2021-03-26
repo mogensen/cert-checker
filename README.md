@@ -110,6 +110,26 @@ docker run -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-che
 
 See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert-checker)
 
+### Using docker-compose
+
+This repository contains an example of deploying the entire Prometheus, Grafana and cert-checker stack, using docker-compose.
+
+```bash
+cd deploy/docker-compose/
+docker-compose up -d
+```
+
+| Service           | URL                                                                                   |
+|-------------------|---------------------------------------------------------------------------------------|
+| cert-checker      | metrics endpoint http://localhost:8080/metrics                                        |
+| Prometheus        | example query http://localhost:9090/graph?g0.expr=cert_checker_expire_time{}&g0.tab=0 |
+| Grafana           | Dashboard  http://localhost:3000/d/cert-checker/certificate-checker                   |
+
+Remember to edit the `deploy/docker-compose/cert-checker/config.yaml` with the actual domains you want to monitor..
+
+See [stefanprodan/dockprom](https://github.com/stefanprodan/dockprom) for more Prometheus, Grafana, AlertManager examples using Docker-compose
+
+
 ### In Kubernetes as static manifests
 
 cert-checker can be installed as static manifests:

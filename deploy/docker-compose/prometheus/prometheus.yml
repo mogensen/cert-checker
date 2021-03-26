@@ -1,0 +1,9 @@
+scrape_configs:
+
+- job_name: cert-checker
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - cert-checker:8080
+
+## Add more scraper configs here
