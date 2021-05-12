@@ -34,7 +34,7 @@ func signalHandler() context.Context {
 		cancel()
 
 		for i := 0; i < 3; i++ {
-			logrus.Warnf("received signal %s, shutting down gracefully...", sig)
+			logrus.Info("received signal %s, shutting down gracefully...", sig)
 			sig = <-ch
 		}
 

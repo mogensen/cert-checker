@@ -11,6 +11,7 @@ import (
 type options struct {
 	IntervalMinutes  int `yaml:"intervalminutes"`
 	Port             int `yaml:"port"`
+	WebPort          int `yaml:"webport"`
 	IntervalDuration time.Duration
 	LogLevel         string               `yaml:"loglevel"`
 	Certificates     []models.Certificate `yaml:"certificates"`

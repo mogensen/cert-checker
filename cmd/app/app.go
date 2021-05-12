@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/mogensen/cert-checker/pkg/controller"
+	"github.com/mogensen/cert-checker/pkg/web"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-
-	"github.com/mogensen/cert-checker/pkg/metrics"
 )
 
 const (
@@ -46,21 +46,49 @@ func NewCommand(ctx context.Context) *cobra.Command {
 			}
 			nlog.SetLevel(logLevel)
 
-			metrics := metrics.New(log)
-			servingAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.Port)
-			if err := metrics.Run(servingAddress); err != nil {
-				return fmt.Errorf("failed to start metrics server: %s", err)
-			}
+			// create a WaitGroup
+			wg := new(sync.WaitGroup)
+			wg.Add(2)
 
-			defer func() {
-				if err := metrics.Shutdown(); err != nil {
+			// Metrics
+
+			metricsAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.Port)
+			c := controller.New(opts.IntervalDuration, metricsAddress, log, opts.Certificates)
+
+			go func() {
+				<-ctx.Done()
+				if err := c.Shutdown(); err != nil {
 					log.Error(err)
 				}
 			}()
 
-			c := controller.New(opts.IntervalDuration, metrics, log, opts.Certificates)
+			go func() {
+				c.Run(ctx)
+				wg.Done()
+			}()
 
-			return c.Run(ctx)
+			// Web UI
+
+			webAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.WebPort)
+			ui := web.New(c, webAddress, log)
+
+			go func() {
+				<-ctx.Done()
+				if err := ui.Shutdown(); err != nil {
+					log.Error(err)
+				}
+			}()
+
+			go func() {
+				ui.Run(ctx)
+				wg.Done()
+			}()
+
+			// wait until WaitGroup is done
+			wg.Wait()
+			log.Infof("Everything is successfully stopped")
+
+			return nil
 		},
 	}
 
