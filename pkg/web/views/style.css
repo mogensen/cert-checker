@@ -1,0 +1,137 @@
+{{define "css"}}
+
+/*
+    Colors used https://loading.io/color/feature/evaneos/
+    HTML and CSS inspired by https://github.com/bderenzo/tinystatus/
+*/
+
+.theme-light {
+    --color-background-good: #fbfbfe;
+    --color-background-bad: #ffe8ee;
+    --font-color: #000000;
+    --color-secondary: #4ba6f5;
+    --color-success: #33cc99;
+    --color-yellow: #fdca30;
+    --color-warning: #f79400;
+    --color-failed: #f34235;
+}
+.theme-dark {
+    --color-background-good: #2a403b;
+    --color-background-bad: #402a2f;
+    --font-color: #ffffff;
+    --color-secondary: #4ba6f5;
+    --color-success: #33cc99;
+    --color-yellow: #fdca30;
+    --color-warning: #f79400;
+    --color-failed: #f34235;
+}
+
+.container button {
+    float: right;
+    color: var(--font-color);
+    background: var(--color-secondary);
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 5px;
+}
+
+ul.footer {
+    display: inline-grid;
+    grid-auto-flow: row;
+    grid-gap: 24px;
+    justify-items: center;
+    margin: auto;
+}
+
+@media (min-width: 500px) {
+    ul.footer {
+        grid-auto-flow: column;
+    }
+}
+
+a {
+    color: #7b7b7b;
+    text-decoration: none;
+}
+
+div.footer {
+    display: flex;
+    width: 100%;
+    line-height: 1.3;
+}
+
+body {
+    font-family: segoe ui, Roboto, Oxygen-Sans, Ubuntu, Cantarell, helvetica neue, Verdana, sans-serif;
+    background: var(--color-background-good);
+    color: var(--font-color);
+}
+
+body.bad {
+    background: var(--color-background-bad);
+}
+
+h1, h2 {
+    margin-top: 20px;
+}
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+ul {
+    padding: 0px;
+}
+li {
+    list-style: none;
+    margin-bottom: 2px;
+    padding: 5px;
+}
+.lastupdate {
+    color: var(--color-success);
+}
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 15px auto;
+}
+.panel {
+    text-align: center;
+    padding: 10px;
+    border: 0px;
+    border-radius: 5px;
+}
+.failed-bg {
+    color: white;
+    background-color: var(--color-failed);
+}
+.warning-bg {
+    color: white;
+    background-color: var(--color-warning);
+}
+.success-bg {
+    color: white;
+    background-color: var(--color-success);
+}
+.hidden {
+    display: none;
+}
+.failed {
+    color: var(--color-failed);
+}
+.warning {
+    color: var(--color-warning);
+}
+.success {
+    color: var(--color-success);
+}
+.small {
+    font-size: 80%;
+}
+.status {
+    float: right;
+}
+.github-fork-ribbon:before {
+    background-color: #333;
+}
+
+{{ end }}

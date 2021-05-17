@@ -6,24 +6,29 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/mogensen/cert-checker/pkg/controller"
+	"github.com/mogensen/cert-checker/pkg/models"
 	"github.com/sirupsen/logrus"
 )
 
+// UI exposes an html endpoint for certificates
 type UI struct {
 	log *logrus.Entry
 
-	controller *controller.Controller
-	webAddress string
-	server     *http.Server
+	certService certProvider
+	webAddress  string
+	server      *http.Server
+}
+
+type certProvider interface {
+	Certs() []models.Certificate
 }
 
 // New returns a new configured instance of the UI struct
-func New(controller *controller.Controller, webAddress string, log *logrus.Entry) *UI {
+func New(certService certProvider, webAddress string, log *logrus.Entry) *UI {
 	return &UI{
-		webAddress: webAddress,
-		controller: controller,
-		log:        log,
+		webAddress:  webAddress,
+		certService: certService,
+		log:         log,
 	}
 }
 
@@ -75,7 +80,7 @@ func (u *UI) handleFunc() http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		certs := u.controller.Certs()
+		certs := u.certService.Certs()
 
 		err := templateHTML(certs, w)
 		if err != nil {

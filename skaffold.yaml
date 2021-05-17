@@ -20,3 +20,6 @@ deploy:
         serviceMonitor.enabled: true
         serviceMonitor.additionalLabels.release: prometheus
         grafanaDashboard.enabled: true
+        ingress.enabled: true
+        ingress.hosts.0.host: cert-checker.localtest.me
+        ingress.hosts.0.paths[0].path: /

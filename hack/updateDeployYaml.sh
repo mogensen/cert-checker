@@ -7,6 +7,7 @@ if ! helm version -c --short | grep -E "v3." >/dev/null; then
 fi
 
 helm template cert-checker deploy/charts/cert-checker --no-hooks --set image.pullPolicy=Always  \
+    --set ingress.enabled=true  \
     | grep -vi helm \
     | grep -vi chart \
     | grep -v "# Source" \

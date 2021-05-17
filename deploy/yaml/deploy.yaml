@@ -46,10 +46,14 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+    - port: 8081
       targetPort: http
       protocol: TCP
       name: http
+    - port: 8080
+      targetPort: metrics-http
+      protocol: TCP
+      name: metrics-http
   selector:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
@@ -104,8 +108,32 @@ spec:
           - name: config-volume
             mountPath: /data/
           ports:
-            - name: http
+            - name: metrics-http
               containerPort: 8080
+              protocol: TCP
+            - name: http
+              containerPort: 8081
               protocol: TCP
           resources:
             {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cert-checker
+  labels:
+    app.kubernetes.io/name: cert-checker
+    app.kubernetes.io/instance: cert-checker
+    app.kubernetes.io/version: "v0.0.3"
+spec:
+  rules:
+    - host: "cert-checker.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cert-checker
+                port:
+                  number: 8081

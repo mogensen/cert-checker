@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="color-scheme" content="dark light">
+    <meta http-equiv="refresh" content="30">
+    <title>cert-checker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+    <script>
+        {{ template "js". }}
+    </script>
+    <style>
+        {{ template "css" . }}
+    </style>
+</head>
+<body {{ if .BadCerts }} class="bad" {{ end }} >
+
+    <div class="container">
+        <button id="switch" onclick="toggleTheme()">Dark mode</button>
+    </div>
+    <a class="github-fork-ribbon" href="https://github.com/mogensen/cert-checker" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+    <div class='container'>
+        <h1>cert-checker</h1>
+        <span class="lastupdate">Last update: {{ timeNow }}</span>
+        {{ if .BadCerts }}
+        <ul><li class='panel failed-bg'>{{ len .BadCerts }} Bad certificate(s)</li></ul>
+        {{ else }}
+        <ul><li class='panel success-bg'>All Systems Operational</li></ul>
+        {{ end }}
+
+        {{ if .BadCerts }}
+        <h2>Errors</h2>
+        <ul>
+            {{ range $key, $cert := .BadCerts }}
+                {{ template "cert" $cert }}
+            {{ end }}
+        </ul>
+        {{ end }}
+
+        {{ if .WarningCerts }}
+        <h2>Warnings</h2>
+        <ul>
+            {{ range $key, $cert := .WarningCerts }}
+                {{ template "cert" $cert }}
+            {{ end }}
+        </ul>
+        {{ end }}
+
+        {{ if .GoodCerts }}
+        <h2>All Goods</h2>
+        <ul>
+            {{ range $key, $cert := .GoodCerts }}
+                {{ template "cert" $cert }}
+            {{ end }}
+        </ul>
+        {{ end }}
+    </div>
+    <div class="footer">
+        <ul class="footer">
+            <li><a id="metrics-link">Metrics</a></li>
+            <li><a href="https://github.com/mogensen/cert-checker/issues">Issues</a></li>
+            <li><a href="https://github.com/mogensen/cert-checker">Github</a></li>
+        </ul>
+    </div>
+</body>
+</html>

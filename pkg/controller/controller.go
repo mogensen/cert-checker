@@ -36,6 +36,7 @@ func New(interval time.Duration, servingAddress string, log *logrus.Entry, certs
 	}
 }
 
+// Certs exposes certificate info to external services
 func (c *Controller) Certs() []models.Certificate {
 	return c.certs
 }
