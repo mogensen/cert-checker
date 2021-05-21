@@ -222,6 +222,13 @@ $ kustomize build kustomization.yaml | kubectl apply -f - # deploy manifests
 
 By default, cert-checker will expose a web ui on `http://0.0.0.0:8081/`.
 
+![](img/web-ui.jpg)
+<center></center>
+<p align="center">
+  <b>Web dashboard</b><br>
+</p>
+
+
 ## Metrics
 
 By default, cert-checker will expose the version information as Prometheus
@@ -289,8 +296,8 @@ make image dev.kind.install
 
 Access the local infrastructure here:
 
-| System        | URL                                                                                                        |
-| ------------- |------------------------------------------------------------------------------------------------------------|
-| Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
-| Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
-| cert-checker  | http://cert-checker.localtest.me/                                                                          |
+| System             | URL                                                                                                        |
+| ------------------ |------------------------------------------------------------------------------------------------------------|
+| Prometheus         | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
+| Grafana            | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
+| build-in dashboard | http://cert-checker.localtest.me/                                                                          |
