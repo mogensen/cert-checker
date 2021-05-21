@@ -12,7 +12,7 @@ test: ## test cert-checker
 	go test ./...
 
 dev: ## live reload development
-	gin  --build ./cmd --path . -a 8081 --all  run
+	gin --build ./cmd --path . --appPort 8081 --all --immediate --bin tmp/cert-checker run
 
 build: ## build cert-checker
 	mkdir -p $(BINDIR)

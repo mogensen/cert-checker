@@ -100,6 +100,27 @@ li {
     border: 0px;
     border-radius: 5px;
 }
+
+/* Small status panels */
+
+.panel-small {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.panel-small div {
+    width: 30%;
+    border-radius: 5px;
+    flex-grow: 1;
+    padding: 10px 0px;
+    font-weight: 600;
+    font-size: 2em;
+    margin: 10px;
+    text-align: center;
+}
+
 .failed-bg {
     color: white;
     background-color: var(--color-failed);

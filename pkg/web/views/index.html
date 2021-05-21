@@ -23,11 +23,12 @@
     <div class='container'>
         <h1>cert-checker</h1>
         <span class="lastupdate">Last update: {{ timeNow }}</span>
-        {{ if .BadCerts }}
-        <ul><li class='panel failed-bg'>{{ len .BadCerts }} Bad certificate(s)</li></ul>
-        {{ else }}
-        <ul><li class='panel success-bg'>All Systems Operational</li></ul>
-        {{ end }}
+
+        <div class="panel-small">
+            <div class="failed-bg">{{ len .BadCerts }} Errors</div>
+            <div class="warning-bg">{{ len .WarningCerts }} Warnings</div>
+            <div class="success-bg">{{ len .GoodCerts }} All Goods</div>
+        </div>
 
         {{ if .BadCerts }}
         <h2>Errors</h2>
