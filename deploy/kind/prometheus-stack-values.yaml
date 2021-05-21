@@ -1,6 +1,7 @@
 prometheus:
   ingress:
     enabled: enabled
+    pathType: ImplementationSpecific
     hosts:
       - prometheus.localtest.me
 

@@ -1,0 +1,26 @@
+{{define "cert"}}
+    <hr />
+    <h3>{{ .DNS }}</h3>
+    <li>
+        <span class='small'>
+        {{ if .Issuer }}
+            {{ .Issuer }}
+        {{else}}
+            No valid issuer fould
+        {{end}}
+        </span>
+
+        <span class='small {{ expireTimeToCSS .NotAfter }}'>Expires: {{ .NotAfter }},</span>
+        <span class='small {{ tlsToCSS .MinimumTLSVersion }}'>{{ .MinimumTLSVersion }}</span>
+
+        {{ if .Error }}
+            <span class='status failed'>Error</span>
+            <li class='panel failed-bg'>{{ .Error }}</li>
+        {{ else if .Warning }}
+            <span class='status warning'>Warning</span>
+            <li class='panel warning-bg'>{{ .Warning }}</li>
+        {{ else }}
+            <span class='status success'>All Good!</span>
+        {{ end }}
+    </li>
+{{- end}}

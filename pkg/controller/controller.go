@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -21,13 +22,23 @@ type Controller struct {
 }
 
 // New returns a new configured instance of the Controller struct
-func New(interval time.Duration, metrics *metrics.Metrics, log *logrus.Entry, certs []models.Certificate) *Controller {
+func New(interval time.Duration, servingAddress string, log *logrus.Entry, certs []models.Certificate) *Controller {
+	metrics := metrics.New(log)
+	if err := metrics.Run(servingAddress); err != nil {
+		log.Errorf("failed to start metrics server: %s", err)
+		return nil
+	}
 	return &Controller{
 		certs:    certs,
 		metrics:  metrics,
 		interval: interval,
 		log:      log,
 	}
+}
+
+// Certs exposes certificate info to external services
+func (c *Controller) Certs() []models.Certificate {
+	return c.certs
 }
 
 // Run starts the main loop that will call ProbeAll regularly.
@@ -83,4 +94,22 @@ func (c *Controller) probeAll(ctx context.Context) {
 		}
 		c.metrics.AddCertificateInfo(cer, isValid)
 	}
+}
+
+// Shutdown closes the metrics server gracefully
+func (c *Controller) Shutdown() error {
+	// If metrics server is not started than exit early
+	if c.metrics == nil {
+		return nil
+	}
+
+	c.log.Info("shutting down metrics server...")
+
+	if err := c.metrics.Shutdown(); err != nil {
+		return fmt.Errorf("metrics server shutdown failed: %s", err)
+	}
+
+	c.log.Info("metrics server gracefully stopped")
+
+	return nil
 }

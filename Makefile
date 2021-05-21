@@ -6,10 +6,13 @@ ARCH   ?= amd64
 help:  ## display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-.PHONY: help build docker all clean
+.PHONY: help build docker all clean dev
 
 test: ## test cert-checker
 	go test ./...
+
+dev: ## live reload development
+	gin --build ./cmd --path . --appPort 8081 --all --immediate --bin tmp/cert-checker run
 
 build: ## build cert-checker
 	mkdir -p $(BINDIR)
@@ -18,7 +21,7 @@ build: ## build cert-checker
 verify: test build ## tests and builds cert-checker
 
 image: ## build docker image
-	docker build -t mogensen/cert-checker:v0.0.3 .
+	docker build -t mogensen/cert-checker:v0.0.4 .
 
 clean: ## clean up created files
 	rm -rf \
@@ -48,7 +51,7 @@ dev.kind.create: ## Create local cluster
 	 --values deploy/kind/prometheus-stack-values.yaml
 
 dev.kind.install: image ## Install cert-checker on kind cluster
-	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.3
+	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.4
 	kubectl create namespace cert-checker || true
 	kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml
 	kubectl apply -n cert-checker -f deploy/yaml/grafana-dashboard-cm.yaml

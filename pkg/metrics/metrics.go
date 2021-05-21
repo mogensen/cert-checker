@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -86,9 +87,9 @@ func (m *Metrics) Run(servingAddress string) error {
 	}
 
 	go func() {
-		m.log.Infof("serving metrics on %s/metrics", ln.Addr())
+		m.log.Infof("serving metrics on %s/metrics", servingAddress)
 
-		if err := m.Serve(ln); err != nil {
+		if err := m.Serve(ln); err != nil && !strings.Contains(err.Error(), "Server closed") {
 			m.log.Errorf("failed to serve prometheus metrics: %s", err)
 			return
 		}

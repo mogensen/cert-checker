@@ -24,6 +24,7 @@ This tool is heavily inspired by the awesome [version-checker by jetstack](https
     + [In Kubernetes as static manifests](#in-kubernetes-as-static-manifests)
     + [Helm](#helm)
     + [Kustomize](#kustomize)
+  * [Web dashboard](#web-dashboard)
   * [Metrics](#metrics)
     + [Grafana Dashboard](#grafana-dashboard)
   * [Options](#options)
@@ -92,11 +93,14 @@ certificates:
 
 ```bash
 ./cert-checker -c config.yaml
-DEBU[2021-03-25T21:56:53+01:00] Probing all
-INFO[2021-03-25T21:56:53+01:00] serving metrics on [::]:8080/metrics
-DEBU[2021-03-25T21:56:53+01:00] Probing: google.com
+DEBU[2021-05-17T17:27:44+02:00] Probing all
+INFO[2021-05-17T17:27:44+02:00] serving ui on 0.0.0.0:8081
+INFO[2021-05-17T17:27:44+02:00] serving metrics on 0.0.0.0:8080/metrics
+DEBU[2021-05-17T17:27:44+02:00] Probing: google.com
 ...
-# Now open browser at http://localhost:8080/metrics
+# Now open browser at:
+#   -  http://localhost:8081/
+#   -  http://localhost:8080/metrics
 ```
 
 ### Run in Docker
@@ -108,7 +112,9 @@ First create a config file as above.
 ```bash
 # Start docker container (mounting the config file may be different on OSX and Windows)
 docker run -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-checker:latest
-# Now open browser at http://localhost:8080/metrics
+# Now open browser at:
+#   -  http://localhost:8081/
+#   -  http://localhost:8080/metrics
 ```
 
 See released docker images on [DockerHub](https://hub.docker.com/r/mogensen/cert-checker)
@@ -124,6 +130,7 @@ docker-compose up -d
 
 | Service           | URL                                                                                   |
 |-------------------|---------------------------------------------------------------------------------------|
+| cert-checker      | ui endpoint http://localhost:8081/                                                    |
 | cert-checker      | metrics endpoint http://localhost:8080/metrics                                        |
 | Prometheus        | example query http://localhost:9090/graph?g0.expr=cert_checker_expire_time{}&g0.tab=0 |
 | Grafana           | Dashboard  http://localhost:3000/d/cert-checker/certificate-checker                   |
@@ -187,7 +194,7 @@ namespace: cert-checker
 resources:
 - github.com/mogensen/cert-checker/deploy/yaml
 # optionally pin to a specific git tag
-# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.3
+# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.4
 
 # override confimap with your required settings
 patchesStrategicMerge:
@@ -210,6 +217,17 @@ $ kustomize build kustomization.yaml | less # preview yaml manifests
 $ kustomize build kustomization.yaml | kubectl apply --dry-run=client -f - # dry-run apply manifests
 $ kustomize build kustomization.yaml | kubectl apply -f - # deploy manifests
 ```
+
+## Web dashboard
+
+By default, cert-checker will expose a web ui on `http://0.0.0.0:8081/`.
+
+![](img/web-ui.jpg)
+<center></center>
+<p align="center">
+  <b>Web dashboard</b><br>
+</p>
+
 
 ## Metrics
 
@@ -278,7 +296,8 @@ make image dev.kind.install
 
 Access the local infrastructure here:
 
-| System        | URL                                                                                                        |
-| ------------- |------------------------------------------------------------------------------------------------------------|
-| Prometheus    | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
-| Grafana       | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
+| System             | URL                                                                                                        |
+| ------------------ |------------------------------------------------------------------------------------------------------------|
+| Prometheus         | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
+| Grafana            | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
+| build-in dashboard | http://cert-checker.localtest.me/                                                                          |

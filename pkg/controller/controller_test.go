@@ -31,7 +31,7 @@ func TestController_Run_StopsWhenContextIsCanceled(t *testing.T) {
 		t.Run("TestController_Run_StopsWhenContextIsCanceled "+tt.interval.String(), func(t *testing.T) {
 
 			log := logrus.NewEntry(logrus.New())
-			c := New(tt.interval, metrics.New(log), log, []models.Certificate{})
+			c := New(tt.interval, "0.0.0.0:0", log, []models.Certificate{})
 
 			timeout := time.After(2 * time.Second)
 			done := make(chan bool)

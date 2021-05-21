@@ -7,7 +7,7 @@ metadata:
     grafana_dashboard: "1"
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.3"
+    app.kubernetes.io/version: "v0.0.4"
 data:
   cert-checker.json: |-
     {
@@ -631,7 +631,7 @@ data:
           "targets": [
             {
               "expr": "sum by(dns, issuer, not_before, not_after, cert_error, tls_min_version) (cert_checker_is_valid) == 0",
-              "format": "time_series",
+              "format": "table",
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -868,7 +868,7 @@ data:
           "targets": [
             {
               "expr": "sum by(dns, issuer, not_before, not_after, cert_error, tls_min_version) (cert_checker_is_valid) == 1",
-              "format": "time_series",
+              "format": "table",
               "instant": true,
               "interval": "",
               "legendFormat": "",
