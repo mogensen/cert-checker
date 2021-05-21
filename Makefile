@@ -21,7 +21,7 @@ build: ## build cert-checker
 verify: test build ## tests and builds cert-checker
 
 image: ## build docker image
-	docker build -t mogensen/cert-checker:v0.0.3 .
+	docker build -t mogensen/cert-checker:v0.0.4 .
 
 clean: ## clean up created files
 	rm -rf \
@@ -51,7 +51,7 @@ dev.kind.create: ## Create local cluster
 	 --values deploy/kind/prometheus-stack-values.yaml
 
 dev.kind.install: image ## Install cert-checker on kind cluster
-	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.3
+	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.4
 	kubectl create namespace cert-checker || true
 	kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml
 	kubectl apply -n cert-checker -f deploy/yaml/grafana-dashboard-cm.yaml

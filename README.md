@@ -194,7 +194,7 @@ namespace: cert-checker
 resources:
 - github.com/mogensen/cert-checker/deploy/yaml
 # optionally pin to a specific git tag
-# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.3
+# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.4
 
 # override confimap with your required settings
 patchesStrategicMerge:
