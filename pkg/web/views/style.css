@@ -41,17 +41,20 @@ ul.footer {
     grid-gap: 24px;
     justify-items: center;
     margin: auto;
+    grid-auto-flow: column;
 }
 
-@media (min-width: 500px) {
-    ul.footer {
-        grid-auto-flow: column;
-    }
+a.header {
+    color: var(--font-color);
+    text-decoration: none;
+    cursor:pointer;
 }
 
-a {
+
+div.footer a {
     color: #7b7b7b;
     text-decoration: none;
+    cursor:pointer;
 }
 
 div.footer {
@@ -111,7 +114,7 @@ li {
 }
 
 .panel-small div {
-    width: 30%;
+    width: 20%;
     border-radius: 5px;
     flex-grow: 1;
     padding: 10px 0px;
@@ -153,6 +156,12 @@ li {
 }
 .github-fork-ribbon:before {
     background-color: #333;
+}
+
+@media screen and (max-width: 700px) {
+    .panel-small div {
+        font-size: 1em;
+    }
 }
 
 {{ end }}

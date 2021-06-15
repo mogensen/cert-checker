@@ -1,6 +1,6 @@
 {{define "cert"}}
     <hr />
-    <h3>{{ .DNS }}</h3>
+    <h3><a class="header" href="https://{{ .DNS }}">{{ .DNS }}</a></h3>
     <li>
         <span class='small'>
         {{ if .Issuer }}
