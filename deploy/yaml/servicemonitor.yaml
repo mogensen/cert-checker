@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: cert-checker
     app.kubernetes.io/instance: cert-checker
-    app.kubernetes.io/version: "v0.0.4"
+    app.kubernetes.io/version: "v0.0.5"
     release: prometheus
 spec:
   selector:

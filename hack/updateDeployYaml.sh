@@ -10,6 +10,7 @@ helm template cert-checker deploy/charts/cert-checker --no-hooks --set image.pul
     --set ingress.enabled=true  \
     --set ingress.hosts[0].host=cert-checker.localtest.me  \
     --set ingress.hosts[0].paths[0].path="/" \
+    --set image.pullPolicy=IfNotPresent \
     | grep -vi helm \
     | grep -vi chart \
     | grep -v "# Source" \

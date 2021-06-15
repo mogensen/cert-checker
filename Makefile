@@ -6,7 +6,7 @@ ARCH   ?= amd64
 help:  ## display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-.PHONY: help build docker all clean dev
+.PHONY: help build image all clean dev
 
 test: ## test cert-checker
 	go test ./...
@@ -21,7 +21,7 @@ build: ## build cert-checker
 verify: test build ## tests and builds cert-checker
 
 image: ## build docker image
-	docker build -t mogensen/cert-checker:v0.0.4 .
+	docker build -t mogensen/cert-checker:v0.0.5 .
 
 clean: ## clean up created files
 	rm -rf \
@@ -51,9 +51,14 @@ dev-kind-create: ## Create local cluster
 	 --values deploy/kind/prometheus-stack-values.yaml
 
 dev-kind-install: image ## Install cert-checker on kind cluster
-	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.4
+	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.5
 	kubectl create namespace cert-checker || true
 	kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml
 	kubectl apply -n cert-checker -f deploy/yaml/grafana-dashboard-cm.yaml
 	kubectl apply -n cert-checker -f deploy/yaml/servicemonitor.yaml
 	kubectl delete pod -l app.kubernetes.io/name=cert-checker -n cert-checker
+	@echo "---------------------------------------------------------------"
+	@echo "Prometheus: http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h"
+	@echo "Grafana:    http://grafana.localtest.me/d/cert-checker/certificate-checker"
+	@echo "Dashboard:  http://cert-checker.localtest.me/"
+	@echo "---------------------------------------------------------------"
