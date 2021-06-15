@@ -8,6 +8,8 @@ fi
 
 helm template cert-checker deploy/charts/cert-checker --no-hooks --set image.pullPolicy=Always  \
     --set ingress.enabled=true  \
+    --set ingress.hosts[0].host=cert-checker.localtest.me  \
+    --set ingress.hosts[0].paths[0].path="/" \
     | grep -vi helm \
     | grep -vi chart \
     | grep -v "# Source" \

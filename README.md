@@ -289,9 +289,9 @@ Test the full setup in Kubernetes with Prometheus and Grafana dashboards:
 
 ```bash
 # First create a new kind cluster locally, and install prometheus
-make dev.kind.create
+make dev-kind-create
 # Build a docker image, load it into kind and deploy cert-checker and promeheus/grafana stuff
-make image dev.kind.install
+make image dev-kind-install
 ```
 
 Access the local infrastructure here:

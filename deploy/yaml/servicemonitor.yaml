@@ -13,4 +13,4 @@ spec:
     matchLabels:
       app.kubernetes.io/name: cert-checker
   endpoints:
-  - port: http
+  - port: metrics-http

@@ -38,10 +38,10 @@ test-coverage: ## Generate test coverage report
 report-card: ## Generate static analysis report
 	goreportcard-cli -v
 
-dev.kind.delete: ## Delete local kubernetes cluster
+dev-kind-delete: ## Delete local kubernetes cluster
 	kind delete clusters $(KIND_CLUSTER_NAME)
 
-dev.kind.create: ## Create local cluster
+dev-kind-create: ## Create local cluster
 	kind create cluster --name $(KIND_CLUSTER_NAME) --config deploy/kind/kind-cluster-config.yaml || true
 	kubectl apply --wait -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -50,7 +50,7 @@ dev.kind.create: ## Create local cluster
 	helm upgrade --wait --install prometheus prometheus-community/kube-prometheus-stack \
 	 --values deploy/kind/prometheus-stack-values.yaml
 
-dev.kind.install: image ## Install cert-checker on kind cluster
+dev-kind-install: image ## Install cert-checker on kind cluster
 	kind --name $(KIND_CLUSTER_NAME) load docker-image mogensen/cert-checker:v0.0.4
 	kubectl create namespace cert-checker || true
 	kubectl apply -n cert-checker -f deploy/yaml/deploy.yaml

@@ -127,7 +127,7 @@ metadata:
     app.kubernetes.io/version: "v0.0.4"
 spec:
   rules:
-    - host: "cert-checker.local"
+    - host: "cert-checker.localtest.me"
       http:
         paths:
           - path: /
