@@ -63,7 +63,7 @@ func warning(cert models.Certificate) string {
 	case "TLS 1.0":
 		fallthrough
 	case "TLS 1.1":
-		warnings = append(warnings, "TLS version depricated")
+		warnings = append(warnings, "TLS version deprecated")
 	}
 	if cert.Info.Detail().NotAfter.Before(time.Now().AddDate(0, 0, minExpireDays)) {
 		warnings = append(warnings, "Certificate is about to expire")
