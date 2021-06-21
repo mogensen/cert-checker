@@ -116,6 +116,18 @@ spec:
               protocol: TCP
           resources:
             {}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 2
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 2
+            periodSeconds: 3
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
