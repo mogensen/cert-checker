@@ -1,18 +1,87 @@
 # Change Log
 
-## Next Release 
+## 0.0.6 
 
-![AppVersion: v0.0.3](https://img.shields.io/static/v1?label=AppVersion&message=v0.0.3&color=success&logo=)
+**Release date:** 2021-06-21
+
+![AppVersion: v0.0.6](https://img.shields.io/static/v1?label=AppVersion&message=v0.0.6&color=success&logo=)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
+* Version v0.0.6 
+* Update Documentation 
+* Adding readinessProbe and livenessProbe to Kubernetes deployment artifacts 
+
+### Default value changes
+
+```diff
+diff --git a/deploy/charts/cert-checker/values.yaml b/deploy/charts/cert-checker/values.yaml
+index 1462119..ac999ec 100644
+--- a/deploy/charts/cert-checker/values.yaml
++++ b/deploy/charts/cert-checker/values.yaml
+@@ -23,6 +23,24 @@ serviceAccount:
+   # If not set and create is true, a name is generated using the fullname template
+   name: ""
+ 
++## Monitoring
++livenessProbe:
++  enabled: true
++  httpGet:
++    path: /
++    port: 8081
++  initialDelaySeconds: 2
++  periodSeconds: 3
++
++readinessProbe:
++  enabled: true
++  httpGet:
++    path: /
++    port: 8081
++  initialDelaySeconds: 2
++  periodSeconds: 3
++
++## Config
+ certchecker:
+   loglevel: info
+   intervalminutes: 1
+```
+
+## 0.0.5 
+
+**Release date:** 2021-06-15
+
+![AppVersion: v0.0.5](https://img.shields.io/static/v1?label=AppVersion&message=v0.0.5&color=success&logo=)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* Version v0.0.5 
+* Update servicemonitor.yaml 
+
+### Default value changes
+
+```diff
+# No changes in this release
+```
+
+## 0.0.4 
+
+**Release date:** 2021-05-21
+
+![AppVersion: v0.0.4](https://img.shields.io/static/v1?label=AppVersion&message=v0.0.4&color=success&logo=)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* Upgrade version to v0.0.4 
+* Update Documentation 
+* Moving html and css into embedded files 
+* Adding Skaffold for quick helm development 
 * Use UID over 10.000 to not clash with host's UID 
 
 ### Default value changes
 
 ```diff
 diff --git a/deploy/charts/cert-checker/values.yaml b/deploy/charts/cert-checker/values.yaml
-index c2961a5..99069fa 100644
+index c2961a5..1462119 100644
 --- a/deploy/charts/cert-checker/values.yaml
 +++ b/deploy/charts/cert-checker/values.yaml
 @@ -53,9 +53,11 @@ podAnnotations:
@@ -28,7 +97,7 @@ index c2961a5..99069fa 100644
  
  securityContext:
    privileged: false
-@@ -64,7 +66,7 @@ securityContext:
+@@ -64,13 +66,34 @@ securityContext:
      - ALL
    readOnlyRootFilesystem: true
    runAsNonRoot: true
@@ -37,6 +106,33 @@ index c2961a5..99069fa 100644
    allowPrivilegeEscalation: false
  
  service:
+   type: ClusterIP
+   port: 8080
+ 
++uiService:
++  type: ClusterIP
++  port: 8081
++
++ingress:
++  enabled: false
++  annotations: {}
++    # kubernetes.io/ingress.class: nginx
++    # kubernetes.io/tls-acme: "true"
++  hosts:
++    - host: cert-checker.local
++      paths:
++      - path: /
++        backend:
++          serviceName: cert-checker.local
++          servicePort: 8081
++  tls: []
++  #  - secretName: chart-example-tls
++  #    hosts:
++  #      - cert-checker.local
++
+ resources: {}
+   # limits:
+   #   cpu: 100m
 ```
 
 ## 0.0.3 
