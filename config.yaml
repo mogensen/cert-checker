@@ -3,6 +3,7 @@ port: 8080
 webport: 8081
 intervalminutes: 1
 certificates:
+    - dns: twitter.com
     - dns: google.com
     - dns: example.com
     - dns: expired.badssl.com

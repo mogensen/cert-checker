@@ -135,9 +135,9 @@ docker-compose up -d
 
 | Service           | URL                                                                                   |
 |-------------------|---------------------------------------------------------------------------------------|
-| cert-checker      | ui endpoint http://localhost:8081/                                                    |
-| cert-checker      | metrics endpoint http://localhost:8080/metrics                                        |
-| Prometheus        | example query http://localhost:9090/graph?g0.expr=cert_checker_expire_time{}&g0.tab=0 |
+| cert-checker      | ui endpoint http://localhost:8081/                                                    |
+| cert-checker      | metrics endpoint http://localhost:8080/metrics                                        |
+| Prometheus        | example query http://localhost:9090/graph?g0.expr=cert_checker_expire_time{}&g0.tab=0 |
 | Grafana           | Dashboard  http://localhost:3000/d/cert-checker/certificate-checker                   |
 
 Remember to edit the `deploy/docker-compose/cert-checker/config.yaml` with the actual domains you want to monitor..
@@ -199,7 +199,7 @@ namespace: cert-checker
 resources:
 - github.com/mogensen/cert-checker/deploy/yaml
 # optionally pin to a specific git tag
-# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.5
+# - github.com/mogensen/cert-checker/deploy/yaml?ref=cert-checker-0.0.6
 
 # override confimap with your required settings
 patchesStrategicMerge:
@@ -301,8 +301,8 @@ make image dev-kind-install
 
 Access the local infrastructure here:
 
-| System             | URL                                                                                                        |
+| System             | URL                                                                                                        |
 | ------------------ |------------------------------------------------------------------------------------------------------------|
-| Prometheus         | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
-| Grafana            | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
-| build-in dashboard | http://cert-checker.localtest.me/                                                                          |
+| Prometheus         | http://prometheus.localtest.me/graph?g0.expr=cert_checker_is_valid&g0.tab=1&g0.stacked=0&g0.range_input=1h |
+| Grafana            | http://grafana.localtest.me/d/cert-checker/certificate-checker                                             |
+| Build-in dashboard | http://cert-checker.localtest.me/                                                                          |

@@ -23,6 +23,24 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+## Monitoring
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /
+    port: 8081
+  initialDelaySeconds: 2
+  periodSeconds: 3
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /
+    port: 8081
+  initialDelaySeconds: 2
+  periodSeconds: 3
+
+## Config
 certchecker:
   loglevel: info
   intervalminutes: 1

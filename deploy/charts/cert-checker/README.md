@@ -1,6 +1,6 @@
 # cert-checker
 
-![Version: 0.0.5](https://img.shields.io/badge/Version-0.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.5](https://img.shields.io/badge/AppVersion-v0.0.5-informational?style=flat-square)
+![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.6](https://img.shields.io/badge/AppVersion-v0.0.6-informational?style=flat-square)
 
 A tool to expose SSL Certificate information as prometheus metrics.
 
@@ -40,6 +40,11 @@ A tool to expose SSL Certificate information as prometheus metrics.
 | ingress.hosts[0].paths[0].backend.servicePort | int | `8081` |  |
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.tls | list | `[]` |  |
+| livenessProbe.enabled | bool | `true` |  |
+| livenessProbe.httpGet.path | string | `"/"` |  |
+| livenessProbe.httpGet.port | int | `8081` |  |
+| livenessProbe.initialDelaySeconds | int | `2` |  |
+| livenessProbe.periodSeconds | int | `3` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | podAnnotations."enable.cert-checker.io/cert-checker" | string | `"true"` |  |
@@ -47,6 +52,11 @@ A tool to expose SSL Certificate information as prometheus metrics.
 | podAnnotations."prometheus.io/port" | string | `"8080"` |  |
 | podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
 | podSecurityContext.fsGroup | int | `35212` |  |
+| readinessProbe.enabled | bool | `true` |  |
+| readinessProbe.httpGet.path | string | `"/"` |  |
+| readinessProbe.httpGet.port | int | `8081` |  |
+| readinessProbe.initialDelaySeconds | int | `2` |  |
+| readinessProbe.periodSeconds | int | `3` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext.allowPrivilegeEscalation | bool | `false` |  |
