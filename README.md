@@ -107,11 +107,16 @@ DEBU[2021-05-17T17:27:44+02:00] Probing: google.com
 
 You can use the published docker image like this:
 
-First create a config file as above.
+First create a config file as above, or download the demo file:
+
+```bash
+curl https://raw.githubusercontent.com/mogensen/cert-checker/main/config.yaml -O
+```
+
 
 ```bash
 # Start docker container (mounting the config file may be different on OSX and Windows)
-docker run -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-checker:latest
+docker run -p 8081:8081 -p 8080:8080 -v ${PWD}/config.yaml:/app/config.yaml mogensen/cert-checker:latest
 # Now open browser at:
 #   -  http://localhost:8081/
 #   -  http://localhost:8080/metrics
