@@ -68,22 +68,22 @@ func NewCommand(ctx context.Context) *cobra.Command {
 			}()
 
 			// Web UI
+			if opts.WebPort > 0 {
+				webAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.WebPort)
+				ui := web.New(c, webAddress, log)
 
-			webAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.WebPort)
-			ui := web.New(c, webAddress, log)
+				go func() {
+					<-ctx.Done()
+					if err := ui.Shutdown(); err != nil {
+						log.Error(err)
+					}
+				}()
 
-			go func() {
-				<-ctx.Done()
-				if err := ui.Shutdown(); err != nil {
-					log.Error(err)
-				}
-			}()
-
-			go func() {
-				ui.Run(ctx)
-				wg.Done()
-			}()
-
+				go func() {
+					ui.Run(ctx)
+					wg.Done()
+				}()
+			}
 			// wait until WaitGroup is done
 			wg.Wait()
 			log.Infof("Everything is successfully stopped")
