@@ -1,6 +1,6 @@
 loglevel: debug
 port: 8080
-webport: 8081
+webport: 8081 # set 0 to disable webport
 intervalminutes: 1
 certificates:
     - dns: twitter.com
