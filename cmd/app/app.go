@@ -32,7 +32,7 @@ func NewCommand(ctx context.Context) *cobra.Command {
 
 			configFile, err := cmd.Flags().GetString("config")
 			if err != nil {
-				nlog.Fatalf("Could not ger configuration file: %v", err)
+				nlog.Fatalf("Could not get configuration file: %v", err)
 			}
 			opts, err := newOptionsFromFile(configFile)
 			if err != nil {
