@@ -3,43 +3,47 @@ name: Build and Test
 on:
   push:
     branches:
-      - 'main'
+    - 'main'
   pull_request:
     branches:
-      - '*'
+    - '*'
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ ubuntu-latest, macOS-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     name: Build & Test
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Setup go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        if: matrix.os == 'ubuntu-latest'
-      -
-        name: Download dependencies
-        run: go mod download
-      -
-        name: Build & Test
-        run: |
-          go build -o ./cert-checker -v ./cmd/
-          go test ./...
-      -
-        name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v7
-        if: matrix.os == 'ubuntu-latest'
-        with:
-          version: "~> v2"
-          args: release --snapshot --skip=publish --clean
+
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Setup go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: go.mod
+
+    # Add support for more platforms with QEMU (optional)
+    # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Build & Test
+      run: |
+        go build -o ./cert-checker -v ./cmd/
+        go test ./...
+
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v7
+      if: matrix.os == 'ubuntu-latest'
+      with:
+        version: "~> v2"
+        args: release --snapshot --skip=publish --clean

@@ -3,34 +3,34 @@ name: Release with goreleaser
 on:
   push:
     tags:
-      - v*.*.*
+    - v*.*.*
 
 jobs:
   release:
     runs-on: ubuntu-latest
     name: goreleaser
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      -
-        name: Setup go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Download dependencies
-        run: go mod download
-      -
-        name: Release via goreleaser
-        uses: goreleaser/goreleaser-action@v7
-        with:
-          version: "~> v2"
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - name: Setup go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: go.mod
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Release via goreleaser
+      uses: goreleaser/goreleaser-action@v7
+      with:
+        version: "~> v2"
+        args: release --clean
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

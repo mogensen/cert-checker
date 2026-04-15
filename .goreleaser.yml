@@ -22,6 +22,8 @@ builds:
   ignore:
     - goos: darwin
       goarch: 386
+    - goos: windows
+      goarch: arm64
   mod_timestamp: '{{ .CommitTimestamp }}'
   flags:
     - -trimpath
