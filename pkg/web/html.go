@@ -18,7 +18,7 @@ var views embed.FS
 var minExpireDays = 30
 
 // templateHTML generates an html representation for the given certs, and writes the result to the io.writer
-func templateHTML(certs []models.Certificate, w io.Writer) error {
+func templateHTML(certs []models.Certificate, w io.Writer, dateFormat formatter) error {
 
 	sum := internalSummery{}
 
@@ -30,8 +30,8 @@ func templateHTML(certs []models.Certificate, w io.Writer) error {
 		uiC := uiCert{
 			DNS:               c.DNS,
 			Issuer:            c.Info.Issuer,
-			NotAfter:          c.Info.Detail().NotAfter.Format("2006-01-02"),
-			NotBefore:         c.Info.Detail().NotBefore.Format("2006-01-02"),
+			NotAfter:          dateFormat.Format(c.Info.Detail().NotAfter),
+			NotBefore:         dateFormat.Format(c.Info.Detail().NotBefore),
 			MinimumTLSVersion: c.Info.MinimumTLSVersion,
 			Warning:           warning(c),
 			Error:             c.Info.Error,
@@ -47,7 +47,7 @@ func templateHTML(certs []models.Certificate, w io.Writer) error {
 		}
 	}
 
-	t := template.Must(template.New("index.html").Funcs(getFunctions()).ParseFS(views, "views/*"))
+	t := template.Must(template.New("index.html").Funcs(getFunctions(dateFormat)).ParseFS(views, "views/*"))
 	err := t.Execute(w, sum)
 	if err != nil {
 		return err

@@ -16,6 +16,7 @@ type UI struct {
 
 	certService certProvider
 	webAddress  string
+	dateFormat  formatter
 	server      *http.Server
 }
 
@@ -24,10 +25,17 @@ type certProvider interface {
 }
 
 // New returns a new configured instance of the UI struct
-func New(certService certProvider, webAddress string, log *logrus.Entry) *UI {
+func New(certService certProvider, webAddress string, dateFormat string, log *logrus.Entry) *UI {
+	f, err := newFormatter(dateFormat)
+	if err != nil {
+		log.WithError(err).Warnf("invalid date format %q, using default YYYY-MM-DD", dateFormat)
+		f = defaultFormatter()
+	}
+
 	return &UI{
 		webAddress:  webAddress,
 		certService: certService,
+		dateFormat:  f,
 		log:         log,
 	}
 }
@@ -82,7 +90,7 @@ func (u *UI) handleFunc() http.Handler {
 
 		certs := u.certService.Certs()
 
-		err := templateHTML(certs, w)
+		err := templateHTML(certs, w, u.dateFormat)
 		if err != nil {
 			logrus.Printf("Error templating: %v\n", err)
 		}

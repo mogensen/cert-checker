@@ -70,7 +70,7 @@ func NewCommand(ctx context.Context) *cobra.Command {
 			// Web UI
 
 			webAddress := fmt.Sprintf("%s:%d", "0.0.0.0", opts.WebPort)
-			ui := web.New(c, webAddress, log)
+			ui := web.New(c, webAddress, opts.DateFormat, log)
 
 			go func() {
 				<-ctx.Done()

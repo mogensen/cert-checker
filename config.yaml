@@ -2,6 +2,7 @@ loglevel: debug
 port: 8080
 webport: 8081
 intervalminutes: 1
+dateformat: YYYY-MM-DD
 certificates:
     - dns: twitter.com
     - dns: google.com

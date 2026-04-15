@@ -1,6 +1,7 @@
 loglevel: debug
 port: 8080  # Optional
 intervalminutes: 2
+dateformat: YYYY-MM-DD
 certificates:
     # Is good, but has old TSL 1.0
     - dns: google.com
