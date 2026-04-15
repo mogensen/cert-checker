@@ -1,8 +1,14 @@
-FROM gcr.io/distroless/static-debian12:nonroot
+# Build stage
+FROM golang:1.26-alpine AS build-env
 
+# Build runtime container
+FROM scratch
 ARG TARGETPLATFORM
 WORKDIR /app
 
-COPY $TARGETPLATFORM/cert-checker /app/cert-checker
+COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --chown=35212:35212 $TARGETPLATFORM/cert-checker /app/cert-checker
+
+USER 35212:35212
 
 ENTRYPOINT ["/app/cert-checker"]
