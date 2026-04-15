@@ -1,33 +1,48 @@
+version: 2
+
 env:
-  - GO111MODULE=on
-  - GOPROXY=https://gocenter.io
+- GOPROXY=https://proxy.golang.org,direct
 before:
   hooks:
-    - go mod download
+  - go mod download
 builds:
-- env:
-    - CGO_ENABLED=0
+- id: cert-checker
+  env:
+  - CGO_ENABLED=0
   goos:
-    - linux
-    - darwin
-    - windows
+  - linux
+  - darwin
+  - windows
   goarch:
-    - 386
-    - amd64
-    - arm
-    - arm64
-  ignore:
-    - goos: darwin
-      goarch: 386
+  - 386
+  - amd64
+  - arm
+  - arm64
   mod_timestamp: '{{ .CommitTimestamp }}'
   flags:
-    - -trimpath
+  - -trimpath
   ldflags:
-    - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+  - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
   main: ./cmd/main.go
   binary: cert-checker
+
+dockers_v2:
+- id: cert-checker-image
+  dockerfile: Dockerfile.goreleaser
+  ids:
+  - cert-checker
+  images:
+  - mogensen/cert-checker
+  tags:
+  - latest
+  - v{{ .Version }}
+  platforms:
+  - linux/amd64
+  - linux/arm64
+
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
+
 changelog:
   sort: asc
   filters:
@@ -39,13 +54,11 @@ changelog:
     - go mod tidy
 
 archives:
-  - name_template: 'cert-checker_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    format_overrides:
-    - goos: windows
-      format: zip
+- name_template: >-
+    cert-checker_{{ title .Os }}_{{ if eq .Arch "386" }}i386{{ else if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+  formats:
+  - tar.gz
+  format_overrides:
+  - goos: windows
+    formats:
+    - zip
