@@ -13,6 +13,7 @@ type options struct {
 	Port            int                  `yaml:"port"`
 	WebPort         int                  `yaml:"webport"`
 	LogLevel        string               `yaml:"loglevel"`
+	DateFormat      string               `yaml:"dateformat"`
 	Certificates    []models.Certificate `yaml:"certificates"`
 
 	// IntervalDuration is computed from IntervalMinutes
@@ -34,6 +35,9 @@ func newOptionsFromFile(fileName string) (*options, error) {
 	}
 	if opts.WebPort == 0 {
 		opts.WebPort = 8081
+	}
+	if opts.DateFormat == "" {
+		opts.DateFormat = "YYYY-MM-DD"
 	}
 	opts.IntervalDuration = time.Duration(int64(opts.IntervalMinutes)) * time.Minute
 	return opts, nil

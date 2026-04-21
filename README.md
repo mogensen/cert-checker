@@ -86,6 +86,7 @@ Create a config file like the below example:
 loglevel: debug
 port: 8080  # Optional
 intervalminutes: 10
+dateformat: YYYY-MM-DD # Optional (example: dd.MM.YYYY)
 certificates:
     - dns: google.com
     - dns: expired.badssl.com
@@ -273,6 +274,16 @@ By default, without the flag `-c, --config`, cert-checker will
 use a config file located next to the binary named `config.yaml`.
 
 This is currently the only flag / option available.
+
+The `config.yaml` supports these settings:
+- `loglevel`
+- `port`
+- `webport`
+- `intervalminutes`
+- `dateformat` (optional, defaults to `YYYY-MM-DD`)
+- `certificates`
+
+Supported `dateformat` tokens are `YYYY`, `YY`, `MM`, `dd`, `HH`, `mm`, and `ss`.
 
 ```bash
 $ cert-checker -h

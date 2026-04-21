@@ -33,6 +33,7 @@ data:
       - dns: rc4-md5.badssl.com
       - dns: rc4.badssl.com
       intervalminutes: 1
+      dateformat: YYYY-MM-DD
       loglevel: info
 ---
 apiVersion: v1

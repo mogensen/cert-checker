@@ -5,16 +5,20 @@ import (
 	"time"
 )
 
-func getFunctions() template.FuncMap {
+func getFunctions(f formatter) template.FuncMap {
 	return template.FuncMap{
-		"timeNow":         templateTimeNow,
-		"tlsToCSS":        templateTLSToCSS,
-		"expireTimeToCSS": templateExpireTimeToCSS,
+		"timeNow": func() string {
+			return templateTimeNow(f)
+		},
+		"tlsToCSS": templateTLSToCSS,
+		"expireTimeToCSS": func(ts string) string {
+			return templateExpireTimeToCSS(ts, f)
+		},
 	}
 }
 
-func templateTimeNow() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+func templateTimeNow(f formatter) string {
+	return f.Format(time.Now())
 }
 
 func templateTLSToCSS(tlsStr string) string {
@@ -33,16 +37,16 @@ func templateTLSToCSS(tlsStr string) string {
 	return "failed"
 }
 
-func parseTime(s string) *time.Time {
-	parsedTime, err := time.Parse("2006-01-02", s)
+func parseTime(s string, f formatter) *time.Time {
+	parsedTime, err := time.Parse(f.GoLayout, s)
 	if err != nil || (parsedTime == time.Time{}) {
 		return nil
 	}
 	return &parsedTime
 }
 
-func templateExpireTimeToCSS(ts string) string {
-	parsedTime := parseTime(ts)
+func templateExpireTimeToCSS(ts string, f formatter) string {
+	parsedTime := parseTime(ts, f)
 	if parsedTime == nil {
 		return "hidden"
 	}
